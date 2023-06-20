@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://garden_planner_dev:camellia@localhost:5432'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://garden_planner_dev:camellia@localhost:5432/garden_planner'
 
 db = SQLAlchemy(app)
 
@@ -25,6 +25,11 @@ class Plant(db.Model):
 
 class Space(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+
+@app.cli.command('create')
+def create_db():
+    db.create_all()
+    print('Tables created successfully')
 
 @app.route('/')
 def index():
