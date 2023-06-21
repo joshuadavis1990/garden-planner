@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import json
 
 app = Flask(__name__)
 
@@ -59,11 +60,11 @@ def seed_db():
     plant_records = [
         PlantRecord(
             name = 'Camellia',
-            description = 'Queens of the winter flowers, Camellias are attrative evergreen shrubs that are highly prized for the beauty of their exquisite blooms, their splendid evergreen foliage and their compact shapely habit.',
+            description = 'Camellias are attrative evergreen shrubs with a variety of flower colours.',
             preferred_location = 'Partial sun',
-            water_rate = 'Keep the plant moist but well-drained',
-            fertilisation_rate = 'Key feeding times are autumn as buds are developing and in spring once flowering has finished and they are about to put on new growth. Feed with things like manure, compost or a Certified Organic fertiliser like Rooster Booster as all will add nutrients and organic matter to the soil.',
-            other_comments = None
+            water_rate = 'Average',
+            fertilisation_rate = 'Key feeding times are autumn as buds are developing and in spring once flowering has finished.',
+            other_comments = 'Keep the plant moist but well-drained.'
         )
     ]    
     # Truncate the tables
@@ -78,9 +79,11 @@ def seed_db():
     db.session.commit()
     print('Models seeded')
 
-@app.cli.command('all_plant_records')
+@app.route('/plantrecords')
 def all_plant_records():
-    plant_records = 
+    stmt = db.select(PlantRecord).order_by(PlantRecord.name)
+    plant_records = db.session.scalars(stmt).all()
+    return json.dumps(plant_records)
 
 @app.route('/')
 def index():
