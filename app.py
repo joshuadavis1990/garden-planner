@@ -16,6 +16,17 @@ class User(db.Model):
     email = db.Column(db.String(50))
     password = db.Column(db.String(100))
 
+class PlantRecord(db.Model):
+    __tablename__ = 'plantrecords'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    description = db.Column(db.Text())
+    preferred_location = db.Column(db.String(50))
+    water_rate = db.Column(db.String(50))
+    fertilisation_rate = db.Column(db.String(50))
+    other_comments = db.Column(db.Text())
+
 @app.cli.command('create')
 def create_db():
     db.drop_all()
@@ -24,17 +35,40 @@ def create_db():
 
 @app.cli.command('seed')
 def seed_db():
-    user = User(
-        f_name = 'Anakin',
-        l_name = 'Skywalker',
-        email = 'anakin@skywalker.com',
-        password = 'darthvader'
-    )
-
+    # Create separate instances of the User model in memory
+    users = [
+        User(
+            f_name = 'Joshua',
+            l_name = 'Davis',
+            email = 'joshuadavis1990@me.com',
+            password = 'coderacademy'
+        ),
+        User(
+            f_name = 'Neil',
+            l_name = 'Armstrong',
+            email = 'neilarmstrong@gmail.com',
+            password = 'astronaut'
+        ),
+        User(
+            f_name = 'Donald',
+            l_name = 'Trump',
+            email = 'donaldtrump@gmail.com',
+            password = 'makeamericagreat'
+        )
+    ]    
+    # Truncate the card table
     db.session.query(User).delete()
-    db.session.add(user)
+
+    # Add each user to the session (transaction)
+    db.session.add_all(users)
+
+    # Commit the users to the database
     db.session.commit()
     print('Models seeded')
+
+# @app.cli.command('all_users')
+# def all_users():
+#     users = 
 
 @app.route('/')
 def index():
