@@ -24,7 +24,7 @@ class PlantRecord(db.Model):
     description = db.Column(db.Text())
     preferred_location = db.Column(db.String(50))
     water_rate = db.Column(db.String(50))
-    fertilisation_rate = db.Column(db.String(50))
+    fertilisation_rate = db.Column(db.Text())
     other_comments = db.Column(db.Text())
 
 @app.cli.command('create')
@@ -55,20 +55,32 @@ def seed_db():
             email = 'donaldtrump@gmail.com',
             password = 'makeamericagreat'
         )
+    ]
+    plant_records = [
+        PlantRecord(
+            name = 'Camellia',
+            description = 'Queens of the winter flowers, Camellias are attrative evergreen shrubs that are highly prized for the beauty of their exquisite blooms, their splendid evergreen foliage and their compact shapely habit.',
+            preferred_location = 'Partial sun',
+            water_rate = 'Keep the plant moist but well-drained',
+            fertilisation_rate = 'Key feeding times are autumn as buds are developing and in spring once flowering has finished and they are about to put on new growth. Feed with things like manure, compost or a Certified Organic fertiliser like Rooster Booster as all will add nutrients and organic matter to the soil.',
+            other_comments = None
+        )
     ]    
-    # Truncate the card table
+    # Truncate the tables
     db.session.query(User).delete()
+    db.session.query(PlantRecord).delete()
 
     # Add each user to the session (transaction)
     db.session.add_all(users)
+    db.session.add_all(plant_records)
 
     # Commit the users to the database
     db.session.commit()
     print('Models seeded')
 
-# @app.cli.command('all_users')
-# def all_users():
-#     users = 
+@app.cli.command('all_plant_records')
+def all_plant_records():
+    plant_records = 
 
 @app.route('/')
 def index():
