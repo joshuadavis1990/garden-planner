@@ -31,7 +31,8 @@ class PlantRecord(db.Model):
 
 class PlantRecordSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'name', 'description', 'preferred_location', 'water_rate', 'fertilisation_rate', 'other_comments')
+        fields = ('name', 'description', 'preferred_location', 'water_rate', 'fertilisation_rate', 'other_comments')
+        
 
 @app.cli.command('create')
 def create_db():
@@ -88,7 +89,7 @@ def seed_db():
 def all_plant_records():
     stmt = db.select(PlantRecord).order_by(PlantRecord.name)
     plant_records = db.session.scalars(stmt).all()
-    return PlantRecordSchema().dumps(plant_records)
+    return PlantRecordSchema(many=True).dump(plant_records)
 
 @app.route('/')
 def index():
