@@ -1,12 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-import json
+from flask_marshmallow import Marshmallow
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://garden_planner_dev:camellia@localhost:5432/garden_planner'
 
 db = SQLAlchemy(app)
+ma = Marshmallow(app)
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -27,6 +28,10 @@ class PlantRecord(db.Model):
     water_rate = db.Column(db.String(50))
     fertilisation_rate = db.Column(db.Text())
     other_comments = db.Column(db.Text())
+
+class PlantRecordSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'name', 'description', 'preferred_location', 'water_rate', 'fertilisation_rate', 'other_comments')
 
 @app.cli.command('create')
 def create_db():
@@ -83,7 +88,7 @@ def seed_db():
 def all_plant_records():
     stmt = db.select(PlantRecord).order_by(PlantRecord.name)
     plant_records = db.session.scalars(stmt).all()
-    return json.dumps(plant_records)
+    return PlantRecordSchema().dumps(plant_records)
 
 @app.route('/')
 def index():
