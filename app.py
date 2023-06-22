@@ -87,6 +87,7 @@ def seed_db():
 
 @app.route('/plantrecords')
 def all_plant_records():
+    '''Select all entries in the PlantRecord table and return them as a JSON list'''
     stmt = db.select(PlantRecord).order_by(PlantRecord.name)
     plant_records = db.session.scalars(stmt).all()
     return PlantRecordSchema(many=True).dump(plant_records)
