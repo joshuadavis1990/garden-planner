@@ -1,6 +1,7 @@
-from flask import Flask
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
 
@@ -8,6 +9,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://garden_planner_de
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+bcrypt = Bcrypt(app)
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -21,7 +23,7 @@ class User(db.Model):
 
 class UserSchema(ma.Schema):
     class Meta:
-        fields = ('f_name', 'l_name', 'email', 'is_admin')
+        fields = ('f_name', 'l_name', 'email', 'password', 'is_admin')
 
 class PlantRecord(db.Model):
     __tablename__ = 'plantrecords'
@@ -53,20 +55,20 @@ def seed_db():
             f_name = 'Joshua',
             l_name = 'Davis',
             email = '14209@coderacademy.edu.au',
-            password = 'coderacademy',
+            password = bcrypt.generate_password_hash('coderacademy').decode('utf-8'),
             is_admin = True
         ),
         User(
             f_name = 'Neil',
             l_name = 'Armstrong',
             email = 'neilarmstrong@gmail.com',
-            password = 'astronaut'
+            password = bcrypt.generate_password_hash('astronaut').decode('utf-8')
         ),
         User(
             f_name = 'Donald',
             l_name = 'Trump',
             email = 'donaldtrump@gmail.com',
-            password = 'makeamericagreat'
+            password = bcrypt.generate_password_hash('makeamericagreat').decode('utf-8')
         )
     ]
     # Create separate instances of the PlantRecords model in memory
@@ -92,9 +94,28 @@ def seed_db():
     db.session.commit()
     print('Models seeded')
 
+@app.route('/register', methods = ['POST'])
+def register():
+    # Parse, sanitise and validate the incoming JSON data via the schema
+    user_info = UserSchema().load(request.json)
+    # Create a new User model instance with the schema data
+    user = User(
+        f_name = user_info['f_name'],
+        l_name = user_info['l_name'],
+        email = user_info['email'],
+        password = bcrypt.generate_password_hash(user_info['password']).decode('utf-8')
+    )
+    
+    # Add and commit the new user
+    db.session.add(user)
+    db.session.commit()
+
+    # Return the new user to the client, excluding the password
+    return UserSchema(exclude=['password']).dump(user), 201
+
 @app.route('/plantrecords')
 def all_plant_records():
-    '''Select all entries in the PlantRecord table and return them as a JSON list'''
+    '''Select all entries in the PlantRecord table and return them as a JSON object'''
     stmt = db.select(PlantRecord).order_by(PlantRecord.name)
     plant_records = db.session.scalars(stmt).all()
     return PlantRecordSchema(many=True).dump(plant_records)
