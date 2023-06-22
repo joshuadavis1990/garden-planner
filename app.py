@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
+from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
 
@@ -96,22 +97,25 @@ def seed_db():
 
 @app.route('/register', methods = ['POST'])
 def register():
-    # Parse, sanitise and validate the incoming JSON data via the schema
-    user_info = UserSchema().load(request.json)
-    # Create a new User model instance with the schema data
-    user = User(
-        f_name = user_info['f_name'],
-        l_name = user_info['l_name'],
-        email = user_info['email'],
-        password = bcrypt.generate_password_hash(user_info['password']).decode('utf-8')
-    )
-    
-    # Add and commit the new user
-    db.session.add(user)
-    db.session.commit()
+    try:
+        # Parse, sanitise and validate the incoming JSON data via the schema
+        user_info = UserSchema().load(request.json)
+        # Create a new User model instance with the schema data
+        user = User(
+            f_name = user_info['f_name'],
+            l_name = user_info['l_name'],
+            email = user_info['email'],
+            password = bcrypt.generate_password_hash(user_info['password']).decode('utf-8')
+        )
+        
+        # Add and commit the new user
+        db.session.add(user)
+        db.session.commit()
 
-    # Return the new user to the client, excluding the password
-    return UserSchema(exclude=['password']).dump(user), 201
+        # Return the new user to the client, excluding the password
+        return UserSchema(exclude=['password']).dump(user), 201
+    except IntegrityError:
+        return {'error': 'Email address already in use'}, 409
 
 @app.route('/plantrecords')
 def all_plant_records():
