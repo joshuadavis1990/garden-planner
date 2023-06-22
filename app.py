@@ -13,10 +13,15 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    f_name = db.Column(db.String(100))
-    l_name = db.Column(db.String(100))
-    email = db.Column(db.String(50))
-    password = db.Column(db.String(100))
+    f_name = db.Column(db.String)
+    l_name = db.Column(db.String)
+    email = db.Column(db.String, nullable=False, unique=True)
+    password = db.Column(db.String, nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
+
+class UserSchema(ma.Schema):
+    class Meta:
+        fields = ('f_name', 'l_name', 'email', 'is_admin')
 
 class PlantRecord(db.Model):
     __tablename__ = 'plantrecords'
@@ -47,8 +52,9 @@ def seed_db():
         User(
             f_name = 'Joshua',
             l_name = 'Davis',
-            email = 'joshuadavis1990@me.com',
-            password = 'coderacademy'
+            email = '14209@coderacademy.edu.au',
+            password = 'coderacademy',
+            is_admin = True
         ),
         User(
             f_name = 'Neil',
@@ -63,6 +69,7 @@ def seed_db():
             password = 'makeamericagreat'
         )
     ]
+    # Create separate instances of the PlantRecords model in memory
     plant_records = [
         PlantRecord(
             name = 'Camellia',
