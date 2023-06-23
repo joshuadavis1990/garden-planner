@@ -116,6 +116,15 @@ def register():
         return UserSchema(exclude=['password']).dump(user), 201
     except IntegrityError:
         return {'error': 'Email address already in use'}, 409
+    
+@app.route('/login', methods=['POST'])
+def login():
+    stmt = db.select(User).filter_by(email=request.json['email'])
+    user = db.session.scalar(stmt)
+    if user and bcrypt.check_password_hash(user.password, request.json['password']):
+        return UserSchema(exclude=['password']).dump(user)
+    else:
+        return {'error': 'Invalid email address or password'}, 401
 
 @app.route('/plantrecords')
 def all_plant_records():
