@@ -1,21 +1,35 @@
-from flask import Flask, request
+from flask import Flask, request, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
 from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from datetime import timedelta
+from os import environ
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 
-app.config['JWT_SECRET_KEY'] = 'Garden Planner'
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://garden_planner_dev:camellia@localhost:5432/garden_planner'
+app.config['JWT_SECRET_KEY'] = environ.get('JWT_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DB_URI')
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+
+def admin_required():
+    user_email = get_jwt_identity()
+    stmt = db.select(User).filter_by(email=user_email)
+    user = db.session.scalar(stmt)
+    if not (user and user.is_admin):
+        abort(401)
+
+@app.errorhandler(401)
+def unauthorized(err):
+    return {'error': 'You must be an admin'}, 401
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -138,11 +152,7 @@ def login():
 @app.route('/plantrecords')
 @jwt_required()
 def all_plant_records():
-    user_email = get_jwt_identity()
-    stmt = db.select(User).filter_by(email=user_email)
-    user = db.session.scalar(stmt)
-    if not user.is_admin:
-        return {'error': 'You must be an admin'}, 401
+    admin_required()
 
     '''Select all entries in the PlantRecord table and return them as a JSON object'''
     stmt = db.select(PlantRecord).order_by(PlantRecord.name)
