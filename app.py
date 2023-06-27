@@ -1,12 +1,12 @@
 from flask import Flask, request, abort
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
-from flask_bcrypt import Bcrypt
 from sqlalchemy.exc import IntegrityError
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from datetime import timedelta
 from os import environ
 from dotenv import load_dotenv
+from models.user import User, UserSchema
+from models.plantrecord import PlantRecord, PlantRecordSchema
+from init import db, ma, bcrypt, jwt
 
 load_dotenv()
 
@@ -15,10 +15,10 @@ app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = environ.get('JWT_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DB_URI')
 
-db = SQLAlchemy(app)
-ma = Marshmallow(app)
-bcrypt = Bcrypt(app)
-jwt = JWTManager(app)
+db.init_app(app)
+ma.init_app(app)
+bcrypt.init_app(app)
+jwt.init_app(app)
 
 def admin_required():
     user_email = get_jwt_identity()
@@ -30,37 +30,7 @@ def admin_required():
 @app.errorhandler(401)
 def unauthorized(err):
     return {'error': 'You must be an admin'}, 401
-
-class User(db.Model):
-    __tablename__ = 'users'
-
-    id = db.Column(db.Integer, primary_key=True)
-    f_name = db.Column(db.String)
-    l_name = db.Column(db.String)
-    email = db.Column(db.String, nullable=False, unique=True)
-    password = db.Column(db.String, nullable=False)
-    is_admin = db.Column(db.Boolean, default=False)
-
-class UserSchema(ma.Schema):
-    class Meta:
-        fields = ('f_name', 'l_name', 'email', 'password', 'is_admin')
-
-class PlantRecord(db.Model):
-    __tablename__ = 'plantrecords'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    description = db.Column(db.Text())
-    preferred_location = db.Column(db.String(50))
-    water_rate = db.Column(db.String(50))
-    fertilisation_rate = db.Column(db.Text())
-    other_comments = db.Column(db.Text())
-
-class PlantRecordSchema(ma.Schema):
-    class Meta:
-        fields = ('name', 'description', 'preferred_location', 'water_rate', 'fertilisation_rate', 'other_comments')
         
-
 @app.cli.command('create')
 def create_db():
     db.drop_all()
@@ -100,8 +70,17 @@ def seed_db():
             water_rate = 'Average',
             fertilisation_rate = 'Key feeding times are autumn as buds are developing and in spring once flowering has finished.',
             other_comments = 'Keep the plant moist but well-drained.'
+        ),
+        PlantRecord(
+            name = 'Pansy',
+            description = 'A large-flowered hybrid plant cultivated as a garden flower.',
+            preferred_location = 'Partial sun',
+            water_rate = 'Average',
+            fertilisation_rate = 'Use a controlled release fertiliser when planting.',
+            other_comments = 'Keep the plant moist but well-drained.'
         )
-    ]    
+    ]
+
     # Truncate the tables
     db.session.query(User).delete()
     db.session.query(PlantRecord).delete()
