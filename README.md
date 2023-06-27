@@ -2,12 +2,12 @@
 
 ## R1
 
-A few years ago, I started planning and establishing my first garden in the beautiful Southern Highlands of New South Wales, Australia. As enjoyable and rewarding as the experience was, I was quickly overwhelmed by how I was possibly going to manage it in the long term. I set up repating monthly, quarterly and even yearly reminders across multiple applications, wrote notes and put all the plant slips in a zip lock bag! Fast forward a few months and even years and I never felt like I was in control and knew what plants needed what and when. This organisational problem was only exacerbated as new plants were added and older plants removed.
+A few years ago, I started planning and establishing my first garden in the beautiful Southern Highlands of New South Wales, Australia. As enjoyable and rewarding as the experience was, I was quickly overwhelmed by how I was possibly going to manage it in the long term. I set up repeating monthly, quarterly and even yearly reminders across multiple applications, wrote notes and even resorted to putting all the plant slips in a zip lock bag! Fast forward a few months or even years and I never felt like I was in control, knowing what plants needed what and when. This organisational problem was only exacerbated as new plants were added and older plants removed.
 
 The Garden Planner API was built using Flask to solve the problem of a person not being able to keep track of all of their trees and/or plants. It aims to be a central repository for a user to log details about the plants and trees they have in their outdoor and indoor spaces. It abides by full CRUD functionality by enabling the user to:
 
 - Create new entries/records for the plants or trees they obtain with attributes for name, the plant's preferred location, the watering and fertilisation rates, as well as a space for additonal comments.
-- Create areas where plants/trees belong, as well as spaces within those areas. For example, the Backyard area might contain multiple spaces or gardens.
+- Create areas where plants/trees belong, as well as spaces within those areas. For example, a user's "Backyard" area might contain multiple spaces or gardens.
 - Access entries they have entered in order to be reminded about a plant's upkeep.
 - Update plant records at any point.
 - Delete plant records at any point.
