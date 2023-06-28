@@ -21,13 +21,35 @@ There are a number of reasons why the Garden Planner application was built and h
 - The Garden Planner API simplifies and unifies the process of plant and tree record keeping. For me personally, I was finding it overwhelming managing how to log when I had last watered, fertilised, transplanted or repotted my plants and I was finding that I was "solving" this problem by logging reminders in different applications, keeping tab of the plant information slips coming back with the plant from a nursery, or simply just having to look and see what the plant was requiring at any given moment. This method of garden management was cumbersome and it was difficult to maintain accuracy and a method of record-keeping. The simple process of entering data in fields such as plants and planting spaces allows for the user to keep tab of their plant varieties in a single, organised location.
 - The application does not prefill the data entry fields with irrelevant information about plant upkeep from other countries with different climates to Australia. The user can enter accurate and relevant information, often obtained by simply looking over the slip that comes with each plant.
 - The user can tailor the application to their needs, making it as simple or detailed as they need. It's designed to be flexible, allowing the user to input data that reflects their space. This solves the problem identied in R1 above by giving the user an opportunity to record all their plant species and planting locations in an organised manner.
-- As our gardens change and update, the Garden Planner API allows for full CRUD functionality across the various entities. This solves the problem of not being able to easily remmeber how to care for our gardens as they grow.
+- As our gardens change and update, the Garden Planner API allows for full CRUD functionality across the various entities. This solves the problem of not being able to easily remember how to care for our gardens as they grow.
 
 ## R3 - Relational Database Management System (DBMS)
 
 ## R4 - Functionality and Benefits of an Object Relational Mapper (ORM)
 
 ## R5 - Endpoint Documentation
+
+### Auth Routes
+
+#### `/register`
+
+- HTTP Request Verb: POST
+- Description: Allows a new user to register 
+- Required Data: 
+- Authentication Methods: None
+
+The following is the expected response from the `/register` endpoint using sample data:
+
+### User Routes
+
+### Area Routes
+
+### Space Routes
+
+### PlantRecord Routes
+
+### Plant Routes
+
 
 ## R6 - Entity Relationship Diagram (ERD)
 
