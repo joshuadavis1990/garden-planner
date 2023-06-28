@@ -50,5 +50,17 @@ def update_plant(plant_id):
         return PlantSchema().dump(plant)
     else:
         return {'error': 'Plant not found'}, 404
+    
+# Delete a plant
+@plants_bp.route('/<int:plant_id>', methods=['DELETE'])
+def delete_plant(plant_id):
+    stmt = db.select(Plant).filter_by(id=plant_id)
+    plant = db.session.scalar(stmt)
+    if plant:
+        db.session.delete(plant)
+        db.session.commit()
+        return {}, 200
+    else:
+        return {'error': 'Plant not found'}, 404
 
 # Include routes for showing all indoor and outdoor plants

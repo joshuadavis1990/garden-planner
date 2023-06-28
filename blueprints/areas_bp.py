@@ -67,3 +67,15 @@ def update_area(area_id):
         return AreaSchema().dump(area)
     else:
         return {'error': 'Area not found'}, 404
+
+# Delete an area
+@areas_bp.route('/<int:area_id>', methods=['DELETE'])
+def delete_area(area_id):
+    stmt = db.select(Area).filter_by(id=area_id)
+    area = db.session.scalar(stmt)
+    if area:
+        db.session.delete(area)
+        db.session.commit()
+        return {}, 200
+    else:
+        return {'error': 'Area not found'}, 404

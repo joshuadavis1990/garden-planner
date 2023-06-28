@@ -64,3 +64,15 @@ def update_plantrecord(plantrecord_id):
         return PlantRecordSchema().dump(plant_record)
     else:
         return {'error': 'Plant Record not found'}, 404
+    
+# Delete a plant record
+@plantrecords_bp.route('/<int:plantrecord_id>', methods=['DELETE'])
+def delete_plantrecord(plantrecord_id):
+    stmt = db.select(PlantRecord).filter_by(id=plantrecord_id)
+    plant_record = db.session.scalar(stmt)
+    if plant_record:
+        db.session.delete(plant_record)
+        db.session.commit()
+        return {}, 200
+    else:
+        return {'error': 'Plant Record not found'}, 404

@@ -27,3 +27,16 @@ def one_user(user_id):
         return UserSchema(exclude=['password']).dump(user)
     else:
         return {'error': 'User not found'}, 404
+
+# Delete a plant
+@users_bp.route('/<int:user_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user(user_id):
+    stmt = db.select(User).filter_by(id=user_id)
+    user = db.session.scalar(stmt)
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return {}, 200
+    else:
+        return {'error': 'User not found'}, 404

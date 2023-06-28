@@ -49,5 +49,17 @@ def update_space(space_id):
         return SpaceSchema().dump(space)
     else:
         return {'error': 'Space not found'}, 404
+    
+# Delete a space
+@spaces_bp.route('/<int:space_id>', methods=['DELETE'])
+def delete_space(space_id):
+    stmt = db.select(Space).filter_by(id=space_id)
+    space = db.session.scalar(stmt)
+    if space:
+        db.session.delete(space)
+        db.session.commit()
+        return {}, 200
+    else:
+        return {'error': 'Space not found'}, 404
 
 # Include routes for showing spaces indoors and outdoors
