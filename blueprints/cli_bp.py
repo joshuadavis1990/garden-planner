@@ -2,6 +2,7 @@ from flask import Blueprint
 from models.user import User
 from models.plantrecord import PlantRecord
 from models.plant import Plant
+from models.area import Area
 from init import db, bcrypt
 
 cli_bp = Blueprint('db', __name__)
@@ -58,22 +59,45 @@ def seed_db():
     # Create separate instances of the Plants model in memory
     plants = [
         Plant(
-            date_planted = '',
-            date_fertilised = '',
+            date_planted = None,
+            date_fertilised = None
         ),
         Plant(
-            date_planted = '',
-            date_fertilised = ''
+            date_planted = None,
+            date_fertilised = None
         )
     ]
+    # Create separate instances of the Areas model in memory
+    areas = [
+        Area(
+            name = 'Frontyard',
+            is_outdoor = True,
+            is_indoor = False
+        ),
+        Area(
+            name = 'Backyard',
+            is_outdoor = True,
+            is_indoor = False
+        ),
+        Area(
+            name = 'House/Indoors',
+            is_outdoor = False,
+            is_indoor = True
+        )
+    ]
+
 
     # Truncate the tables
     db.session.query(User).delete()
     db.session.query(PlantRecord).delete()
+    db.session.query(Plant).delete()
+    db.session.query(Area).delete()
 
     # Add each user to the session (transaction)
     db.session.add_all(users)
     db.session.add_all(plant_records)
+    db.session.add_all(plants)
+    db.session.add_all(areas)
 
     # Commit the users to the database
     db.session.commit()
