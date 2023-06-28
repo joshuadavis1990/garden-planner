@@ -4,6 +4,8 @@ from init import db, ma, bcrypt, jwt
 from blueprints.cli_bp import cli_bp
 from blueprints.auth_bp import auth_bp
 from blueprints.plantrecords_bp import plantrecords_bp
+from blueprints.plants_bp import plants_bp
+from blueprints.areas_bp import areas_bp
 
 # Factory function for creating and configuring an object, 'app', and returning it
 def setup():
@@ -24,5 +26,7 @@ def setup():
     app.register_blueprint(cli_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(plantrecords_bp)
+    app.register_blueprint(plants_bp)
+    app.register_blueprint(areas_bp)
 
     return app

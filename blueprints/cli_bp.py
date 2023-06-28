@@ -81,7 +81,7 @@ def seed_db():
             is_indoor = False
         ),
         Area(
-            name = 'House/Indoors',
+            name = 'House',
             is_outdoor = False,
             is_indoor = True
         )
