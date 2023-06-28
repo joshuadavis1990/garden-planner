@@ -19,6 +19,7 @@ def all_plant_records():
 
 # Get one plant record
 @plantrecords_bp.route('/<int:plantrecord_id>')
+@jwt_required()
 def one_plantrecord(plantrecord_id):
     stmt = db.select(PlantRecord).filter_by(id=plantrecord_id)
     plant_record = db.session.scalar(stmt)
@@ -29,6 +30,7 @@ def one_plantrecord(plantrecord_id):
     
 # Create a new plant record
 @plantrecords_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_plantrecord():
     # Load the incoming POST data via the schema
     plantrecord_info = PlantRecordSchema().load(request.json)
@@ -49,6 +51,7 @@ def create_plantrecord():
 
 # Update a plant record
 @plantrecords_bp.route('/<int:plantrecord_id>', methods=['PUT', 'PATCH'])
+@jwt_required()
 def update_plantrecord(plantrecord_id):
     stmt = db.select(PlantRecord).filter_by(id=plantrecord_id)
     plant_record = db.session.scalar(stmt)
@@ -67,7 +70,9 @@ def update_plantrecord(plantrecord_id):
     
 # Delete a plant record
 @plantrecords_bp.route('/<int:plantrecord_id>', methods=['DELETE'])
+@jwt_required()
 def delete_plantrecord(plantrecord_id):
+    admin_required()
     stmt = db.select(PlantRecord).filter_by(id=plantrecord_id)
     plant_record = db.session.scalar(stmt)
     if plant_record:

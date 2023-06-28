@@ -28,10 +28,11 @@ def one_user(user_id):
     else:
         return {'error': 'User not found'}, 404
 
-# Delete a plant
+# Delete a user
 @users_bp.route('/<int:user_id>', methods=['DELETE'])
 @jwt_required()
 def delete_user(user_id):
+    admin_required()
     stmt = db.select(User).filter_by(id=user_id)
     user = db.session.scalar(stmt)
     if user:

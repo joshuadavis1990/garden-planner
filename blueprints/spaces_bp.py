@@ -1,11 +1,14 @@
 from flask import Blueprint, request
 from models.space import Space, SpaceSchema
 from init import db
+from flask_jwt_extended import jwt_required
+from blueprints.auth_bp import admin_required
 
 spaces_bp = Blueprint('spaces', __name__, url_prefix='/spaces')
 
 # Get all spaces
 @spaces_bp.route('/')
+@jwt_required()
 def all_spaces():
     # Select all entries in the Spaces table and return them as a JSON object
     stmt = db.select(Space).order_by(Space.name)
@@ -14,6 +17,7 @@ def all_spaces():
 
 # Get one space
 @spaces_bp.route('/<int:space_id>')
+@jwt_required()
 def one_space(space_id):
     stmt = db.select(Space).filter_by(id=space_id)
     space = db.session.scalar(stmt)
@@ -24,6 +28,7 @@ def one_space(space_id):
     
 # Create a new space
 @spaces_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_space():
     # Load the incoming POST data via the schema
     space_info = SpaceSchema().load(request.json)
@@ -39,7 +44,9 @@ def create_space():
 
 # Update a space
 @spaces_bp.route('/<int:space_id>', methods=['PUT', 'PATCH'])
+@jwt_required()
 def update_space(space_id):
+    admin_required()
     stmt = db.select(Space).filter_by(id=space_id)
     space = db.session.scalar(stmt)
     space_info = SpaceSchema().load(request.json)
@@ -52,7 +59,9 @@ def update_space(space_id):
     
 # Delete a space
 @spaces_bp.route('/<int:space_id>', methods=['DELETE'])
+@jwt_required()
 def delete_space(space_id):
+    admin_required()
     stmt = db.select(Space).filter_by(id=space_id)
     space = db.session.scalar(stmt)
     if space:

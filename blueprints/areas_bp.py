@@ -1,11 +1,14 @@
 from flask import Blueprint, request
 from models.area import Area, AreaSchema
 from init import db
+from flask_jwt_extended import jwt_required
+from blueprints.auth_bp import admin_required
 
 areas_bp = Blueprint('areas', __name__, url_prefix='/areas')
 
 # Get all areas
 @areas_bp.route('/')
+@jwt_required()
 def all_areas():
     # Select all entries in the Areas table and return them as a JSON object
     stmt = db.select(Area).order_by(Area.name)
@@ -14,6 +17,7 @@ def all_areas():
 
 # Get all outdoor areas
 @areas_bp.route('/outdoors')
+@jwt_required()
 def all_outdoor_areas():
     stmt = db.select(Area).where(Area.is_outdoor)
     areas = db.session.scalars(stmt).all()
@@ -21,6 +25,7 @@ def all_outdoor_areas():
 
 # Get all indoor areas
 @areas_bp.route('/indoors')
+@jwt_required
 def all_indoor_areas():
     stmt = db.select(Area).where(Area.is_indoor)
     areas = db.session.scalars(stmt).all()
@@ -28,6 +33,7 @@ def all_indoor_areas():
 
 # Get one area
 @areas_bp.route('/<int:area_id>')
+@jwt_required()
 def one_area(area_id):
     stmt = db.select(Area).filter_by(id=area_id)
     area = db.session.scalar(stmt)
@@ -38,6 +44,7 @@ def one_area(area_id):
     
 # Create a new area
 @areas_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_area():
     # Load the incoming POST data via the schema
     area_info = AreaSchema().load(request.json)
@@ -55,7 +62,9 @@ def create_area():
 
 # Update an area
 @areas_bp.route('/<int:area_id>', methods=['PUT', 'PATCH'])
+@jwt_required()
 def update_area(area_id):
+    admin_required()
     stmt = db.select(Area).filter_by(id=area_id)
     area = db.session.scalar(stmt)
     area_info = AreaSchema().load(request.json)
@@ -70,7 +79,9 @@ def update_area(area_id):
 
 # Delete an area
 @areas_bp.route('/<int:area_id>', methods=['DELETE'])
+@jwt_required()
 def delete_area(area_id):
+    admin_required()
     stmt = db.select(Area).filter_by(id=area_id)
     area = db.session.scalar(stmt)
     if area:

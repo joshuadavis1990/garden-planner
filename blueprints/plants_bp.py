@@ -2,11 +2,14 @@ from flask import Blueprint, request
 from models.plant import Plant, PlantSchema
 from init import db
 from datetime import date
+from flask_jwt_extended import jwt_required
+from blueprints.auth_bp import admin_required
 
 plants_bp = Blueprint('plants', __name__, url_prefix='/plants')
 
 # Get all plants
 @plants_bp.route('/')
+@jwt_required()
 def all_plants():
     # Select all entries in the Plants table and return them as a JSON object
     stmt = db.select(Plant).order_by(Plant.date_planted)
@@ -15,6 +18,7 @@ def all_plants():
 
 # Get one plant
 @plants_bp.route('/<int:plant_id>')
+@jwt_required()
 def one_plant(plant_id):
     stmt = db.select(Plant).filter_by(id=plant_id)
     plant = db.session.scalar(stmt)
@@ -25,6 +29,7 @@ def one_plant(plant_id):
     
 # Create a new plant
 @plants_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_plant():
     plant_info = PlantSchema().load(request.json)
     plant = Plant(
@@ -39,7 +44,9 @@ def create_plant():
 
 # Update the data for a single plant
 @plants_bp.route('/<int:plant_id>', methods=['PUT', 'PATCH'])
+@jwt_required()
 def update_plant(plant_id):
+    admin_required()
     stmt = db.select(Plant).filter_by(id=plant_id)
     plant = db.session.scalar(stmt)
     plant_info = PlantSchema().load(request.json)
@@ -53,7 +60,9 @@ def update_plant(plant_id):
     
 # Delete a plant
 @plants_bp.route('/<int:plant_id>', methods=['DELETE'])
+@jwt_required()
 def delete_plant(plant_id):
+    admin_required()
     stmt = db.select(Plant).filter_by(id=plant_id)
     plant = db.session.scalar(stmt)
     if plant:
