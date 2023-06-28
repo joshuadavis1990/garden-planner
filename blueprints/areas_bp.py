@@ -52,3 +52,18 @@ def create_area():
     db.session.commit()
     # Send the new area back to the client
     return AreaSchema().dump(area), 201
+
+# Update an area
+@areas_bp.route('/<int:area_id>', methods=['PUT', 'PATCH'])
+def update_area(area_id):
+    stmt = db.select(Area).filter_by(id=area_id)
+    area = db.session.scalar(stmt)
+    area_info = AreaSchema().load(request.json)
+    if area:
+        area.name = area_info.get('name', area.name)
+        area.is_outdoor = area_info.get('is_outdoor', area.is_outdoor)
+        area.is_indoor = area_info.get('is_indoor', area.is_indoor)
+        db.session.commit()
+        return AreaSchema().dump(area)
+    else:
+        return {'error': 'Area not found'}, 404

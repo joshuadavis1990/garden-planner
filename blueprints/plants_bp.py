@@ -37,4 +37,18 @@ def create_plant():
     # Send the new plant back to the client
     return PlantSchema().dump(plant), 201
 
+# Update the data for a single plant
+@plants_bp.route('/<int:plant_id>', methods=['PUT', 'PATCH'])
+def update_plant(plant_id):
+    stmt = db.select(Plant).filter_by(id=plant_id)
+    plant = db.session.scalar(stmt)
+    plant_info = PlantSchema().load(request.json)
+    if plant:
+        plant.date_planted = plant_info.get('date_planted', plant.date_planted)
+        plant.date_fertilised = plant_info.get('date_fertilised', plant.date_fertilised)
+        db.session.commit()
+        return PlantSchema().dump(plant)
+    else:
+        return {'error': 'Plant not found'}, 404
+
 # Include routes for showing all indoor and outdoor plants
