@@ -13,4 +13,4 @@ class PlantRecord(db.Model):
 
 class PlantRecordSchema(ma.Schema):
     class Meta:
-        fields = ('name', 'description', 'preferred_location', 'water_rate', 'fertilisation_rate', 'other_comments')
+        fields = ('id', 'name', 'description', 'preferred_location', 'water_rate', 'fertilisation_rate', 'other_comments')

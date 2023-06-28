@@ -15,3 +15,12 @@ def all_plant_records():
     stmt = db.select(PlantRecord).order_by(PlantRecord.name)
     plant_records = db.session.scalars(stmt).all()
     return PlantRecordSchema(many=True).dump(plant_records)
+
+@plantrecords_bp.route('/plantrecords/<int:plantrecord_id>')
+def one_plantrecord(plantrecord_id):
+    stmt = db.select(PlantRecord).filter_by(id=plantrecord_id)
+    plant_record = db.session.scalar(stmt)
+    if plant_record:
+        return PlantRecordSchema().dump(plant_record)
+    else:
+        return {'error': 'Plant Record not found'}, 404

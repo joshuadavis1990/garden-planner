@@ -1,6 +1,6 @@
 # Garden Planner API
 
-## R1
+## R1 - Problem Identification
 
 A few years ago, I started planning and establishing my first garden in the beautiful Southern Highlands of New South Wales, Australia. As enjoyable and rewarding as the experience was, I was quickly overwhelmed by how I was possibly going to manage it in the long term. I set up repeating monthly, quarterly and even yearly reminders across multiple applications, wrote notes and even resorted to putting all the plant slips in a zip lock bag! Fast forward a few months or even years and I never felt like I was in control, knowing what plants needed what and when. This organisational problem was only exacerbated as new plants were added and older plants removed.
 
@@ -14,7 +14,7 @@ The Garden Planner API was built using Flask to solve the problem of a person no
 
 This CRUD functionality helps the user to stay organised and in control of their garden planning and maintenance.
 
-## R2
+## R2 - Problem Justification
 
 There are a number of reasons why the Garden Planner application was built and has a genuine need:
 
@@ -22,3 +22,19 @@ There are a number of reasons why the Garden Planner application was built and h
 - The application does not prefill the data entry fields with irrelevant information about plant upkeep from other countries with different climates to Australia. The user can enter accurate and relevant information, often obtained by simply looking over the slip that comes with each plant.
 - The user can tailor the application to their needs, making it as simple or detailed as they need. It's designed to be flexible, allowing the user to input data that reflects their space. This solves the problem identied in R1 above by giving the user an opportunity to record all their plant species and planting locations in an organised manner.
 - As our gardens change and update, the Garden Planner API allows for full CRUD functionality across the various entities. This solves the problem of not being able to easily remmeber how to care for our gardens as they grow.
+
+## R3 - Relational Database Management System (DBMS)
+
+## R4 - Functionality and Benefits of an Object Relational Mapper (ORM)
+
+## R5 - Endpoint Documentation
+
+## R6 - Entity Relationship Diagram (ERD)
+
+## R7 - Third Party Services
+
+## R8 - Model Description
+
+## R9 - Database Relations
+
+## R10 - Project Management
