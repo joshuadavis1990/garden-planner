@@ -1,6 +1,7 @@
-from flask import Blueprint
+from flask import Blueprint, request
 from models.plant import Plant, PlantSchema
 from init import db
+from datetime import date
 
 plants_bp = Blueprint('plants', __name__, url_prefix='/plants')
 
@@ -21,3 +22,19 @@ def one_plant(plant_id):
         return PlantSchema().dump(plant)
     else:
         return {'error': 'Plant not found'}, 404
+    
+# Create a new plant
+@plants_bp.route('/', methods=['POST'])
+def create_plant():
+    plant_info = PlantSchema().load(request.json)
+    plant = Plant(
+        date_planted = date.today(),
+        date_fertilised = plant_info['date_fertilised']
+    )
+    # Add and commit the new plant to the session
+    db.session.add(plant)
+    db.session.commit()
+    # Send the new plant back to the client
+    return PlantSchema().dump(plant), 201
+
+# Include routes for showing all indoor and outdoor plants

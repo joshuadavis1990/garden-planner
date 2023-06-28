@@ -21,3 +21,5 @@ def one_space(space_id):
         return SpaceSchema().dump(space)
     else:
         return {'error': 'Space not found'}, 404
+
+# Include routes for showing spaces indoors and outdoors

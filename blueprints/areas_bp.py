@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, request
 from models.area import Area, AreaSchema
 from init import db
 
@@ -35,3 +35,20 @@ def one_area(area_id):
         return AreaSchema().dump(area)
     else:
         return {'error': 'Area not found'}, 404
+    
+# Create a new area
+@areas_bp.route('/', methods=['POST'])
+def create_area():
+    # Load the incoming POST data via the schema
+    area_info = AreaSchema().load(request.json)
+    # Create a new Area instance from the area_info
+    area = Area(
+        name = area_info['name'],
+        is_outdoor = area_info['is_outdoor'],
+        is_indoor = area_info['is_indoor']
+    )
+    # Add and commit the new area to the session
+    db.session.add(area)
+    db.session.commit()
+    # Send the new area back to the client
+    return AreaSchema().dump(area), 201

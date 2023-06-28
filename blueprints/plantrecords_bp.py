@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, request
 from models.plantrecord import PlantRecord, PlantRecordSchema
 from init import db
 from flask_jwt_extended import jwt_required
@@ -27,6 +27,22 @@ def one_plantrecord(plantrecord_id):
     else:
         return {'error': 'Plant Record not found'}, 404
     
-# # Create a new plant record
-# @plantrecords_bp.route('/', methods=['POST'])
-# def create_plantrecord():
+# Create a new plant record
+@plantrecords_bp.route('/', methods=['POST'])
+def create_plantrecord():
+    # Load the incoming POST data via the schema
+    plantrecord_info = PlantRecordSchema().load(request.json)
+    # Create a new PlantRecord instance from the plantrecord_info
+    plantrecord = PlantRecord(
+        name = plantrecord_info['name'],
+        description = plantrecord_info['description'],
+        preferred_location = plantrecord_info['preferred_location'],
+        water_rate = plantrecord_info['water_rate'],
+        fertilisation_rate = plantrecord_info['fertilisation_rate'],
+        other_comments = plantrecord_info['other_comments']
+    )
+    # Add and commit the new plant record to the session
+    db.session.add(plantrecord)
+    db.session.commit()
+    # Send the new plant record back to the client
+    return PlantRecordSchema().dump(plantrecord), 201
