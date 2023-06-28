@@ -72,6 +72,17 @@ Despite the numerous advantages listed above, PostgreSQL is comparatively slower
 
 ## R4 - Functionality and Benefits of an Object Relational Mapper (ORM)
 
+An Object Relational Mapper (ORM) acts as a bridge between object-oriented programs and relational databases. In practice and directly related to this API, this means that an ORM will convert Python objects to the relational schema of the database. Direct SQL queries for the CRUD operations are therefore not needed when using an ORM as it acts as an additional layer between a programming language and a database. Principally, this means that it standardises the coding process, reducing boilerplate and speeding development time (/Understanding Object-Relational Mapping/). This API, in particular, has used the SQLAlchemy ORM which provides SQL functionality, and efficient and high-performing database access, adapted into a simple and Pythonic domain language (/The Python SQL Toolkit and Object Relational Mapper/).
+
+SQLAlchemy provides extensive help documentation for understanding its comprehensive functionality. It has allowed the following functionality with this API:
+
+- Declarative mapping of models which simultaneously define a Python object model as well as database metadata that describes real SQL tables that exist, or will exist, in a database (/SQLAlchemy 2.0 Documentation/). In this API, a model has been created for each entity in the database.
+- Creating instances of classes, using the `session.add_all()` method to add multiple objects at once, and then using the `session.commit() method to flush any pending changes and commit the current database transaction (/SQLAlchemy 2.0 Documentation/).
+- Using the `select()` function to create a new `Select` object, then invoked using a `Session`.
+- Using the `Session.scalars()` method to return a `ScalarResult` to iterate through the ORM objects selected.
+- Querying against multiple tables at once using the join keyword in the `Select.join()` method.
+- Automatically tracking changes to the objects as they are made.
+
 ## R5 - Endpoint Documentation
 
 ### Auth Routes
@@ -114,7 +125,13 @@ The following is the expected response from the `/register` endpoint using sampl
 
 /Description of the database normalization basics/, Microsoft, https://learn.microsoft.com/en-us/office/troubleshoot/access/database-normalization-description. Accessed 28 June 2023.
 
+/SQLAlchemy 2.0 Documentation/, SQLAlchemy, https://docs.sqlalchemy.org/en/20/orm/quickstart.html. Accessed 28 June 2023.
+
 /The benefits of PostgreSQL/, Prisma's Data Guide, https://www.prisma.io/dataguide/postgresql/benefits-of-postgresql. Accessed 28 June 2023.
+
+/The Python SQL Toolkit and Object Relational Mapper/, SQLAlchemy, https://www.sqlalchemy.org. Accessed 28 June 2023.
+
+/Understanding Object-Relational Mapping/, altexsoft, https://www.altexsoft.com/blog/object-relational-mapping/. Accessed 28 June 2023.
 
 /What is a database management system?/ IBM, https://www.ibm.com/docs/en/zos-basic-skills?topic=zos-what-is-database-management-system. Accessed 28 June 2023.
 
