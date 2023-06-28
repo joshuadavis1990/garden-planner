@@ -3,6 +3,7 @@ from models.user import User
 from models.plantrecord import PlantRecord
 from models.plant import Plant
 from models.area import Area
+from models.space import Space
 from init import db, bcrypt
 
 cli_bp = Blueprint('db', __name__)
@@ -37,7 +38,7 @@ def seed_db():
             password = bcrypt.generate_password_hash('makeamericagreat').decode('utf-8')
         )
     ]
-    # Create separate instances of the PlantRecords model in memory
+    # Create separate instances of the PlantRecord model in memory
     plant_records = [
         PlantRecord(
             name = 'Camellia',
@@ -56,7 +57,7 @@ def seed_db():
             other_comments = 'Keep the plant moist but well-drained.'
         )
     ]
-    # Create separate instances of the Plants model in memory
+    # Create separate instances of the Plant model in memory
     plants = [
         Plant(
             date_planted = None,
@@ -67,7 +68,7 @@ def seed_db():
             date_fertilised = None
         )
     ]
-    # Create separate instances of the Areas model in memory
+    # Create separate instances of the Area model in memory
     areas = [
         Area(
             name = 'Frontyard',
@@ -85,19 +86,38 @@ def seed_db():
             is_indoor = True
         )
     ]
-
+    # Create separate instances of the Space model in memory
+    spaces = [
+        Space(
+            name = 'Rose Garden'
+        ),
+        Space(
+            name = 'Window Garden'
+        ),
+        Space(
+            name = 'Living Room'
+        ),
+        Space(
+            name = 'Kitchen'
+        ),
+        Space(
+            name = 'Vegetable Garden'
+        )
+    ]
 
     # Truncate the tables
     db.session.query(User).delete()
     db.session.query(PlantRecord).delete()
     db.session.query(Plant).delete()
     db.session.query(Area).delete()
+    db.session.query(Space).delete()
 
     # Add each user to the session (transaction)
     db.session.add_all(users)
     db.session.add_all(plant_records)
     db.session.add_all(plants)
     db.session.add_all(areas)
+    db.session.add_all(spaces)
 
     # Commit the users to the database
     db.session.commit()
