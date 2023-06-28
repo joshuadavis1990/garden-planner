@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, request
 from models.space import Space, SpaceSchema
 from init import db
 
@@ -21,5 +21,20 @@ def one_space(space_id):
         return SpaceSchema().dump(space)
     else:
         return {'error': 'Space not found'}, 404
+    
+# Create a new space
+@spaces_bp.route('/', methods=['POST'])
+def create_space():
+    # Load the incoming POST data via the schema
+    space_info = SpaceSchema().load(request.json)
+    # Create a new Space instance from the space_info
+    space = Space(
+        name = space_info['name']
+    )
+    # Add and commit the new space to the session
+    db.session.add(space)
+    db.session.commit()
+    # Send the new space back to the client
+    return SpaceSchema().dump(space), 201
 
 # Include routes for showing spaces indoors and outdoors
