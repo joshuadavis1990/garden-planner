@@ -15,3 +15,15 @@ def all_users():
     stmt = db.select(User).order_by(User.id)
     users = db.session.scalars(stmt).all()
     return UserSchema(many=True, exclude=['password']).dump(users)
+
+# Get one user
+@users_bp.route('/<int:user_id>')
+@jwt_required()
+def one_user(user_id):
+    admin_required()
+    stmt = db.select(User).filter_by(id=user_id)
+    user = db.session.scalar(stmt)
+    if user:
+        return UserSchema(exclude=['password']).dump(user)
+    else:
+        return {'error': 'User not found'}, 404

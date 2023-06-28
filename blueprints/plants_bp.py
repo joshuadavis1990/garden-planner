@@ -11,3 +11,13 @@ def all_plants():
     stmt = db.select(Plant).order_by(Plant.date_planted)
     plants = db.session.scalars(stmt).all()
     return PlantSchema(many=True).dump(plants)
+
+# Get one plant
+@plants_bp.route('/<int:plant_id>')
+def one_plant(plant_id):
+    stmt = db.select(Plant).filter_by(id=plant_id)
+    plant = db.session.scalar(stmt)
+    if plant:
+        return PlantSchema().dump(plant)
+    else:
+        return {'error': 'Plant not found'}, 404

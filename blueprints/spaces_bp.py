@@ -11,3 +11,13 @@ def all_spaces():
     stmt = db.select(Space).order_by(Space.name)
     spaces = db.session.scalars(stmt).all()
     return SpaceSchema(many=True).dump(spaces)
+
+# Get one space
+@spaces_bp.route('/<int:space_id>')
+def one_space(space_id):
+    stmt = db.select(Space).filter_by(id=space_id)
+    space = db.session.scalar(stmt)
+    if space:
+        return SpaceSchema().dump(space)
+    else:
+        return {'error': 'Space not found'}, 404
