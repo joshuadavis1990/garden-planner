@@ -1,6 +1,7 @@
 from flask import Blueprint
 from models.user import User
 from models.plantrecord import PlantRecord
+from models.plant import Plant
 from init import db, bcrypt
 
 cli_bp = Blueprint('db', __name__)
@@ -52,6 +53,17 @@ def seed_db():
             water_rate = 'Average',
             fertilisation_rate = 'Use a controlled release fertiliser when planting.',
             other_comments = 'Keep the plant moist but well-drained.'
+        )
+    ]
+    # Create separate instances of the Plants model in memory
+    plants = [
+        Plant(
+            date_planted = '',
+            date_fertilised = '',
+        ),
+        Plant(
+            date_planted = '',
+            date_fertilised = ''
         )
     ]
 

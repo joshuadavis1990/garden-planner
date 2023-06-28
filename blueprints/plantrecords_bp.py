@@ -4,9 +4,10 @@ from init import db
 from flask_jwt_extended import jwt_required
 from blueprints.auth_bp import admin_required
 
-plantrecords_bp = Blueprint('plantrecords', __name__)
+plantrecords_bp = Blueprint('plantrecords', __name__, url_prefix='/plantrecords')
 
-@plantrecords_bp.route('/plantrecords')
+# Get all plant records
+@plantrecords_bp.route('/')
 @jwt_required()
 def all_plant_records():
     admin_required()
@@ -16,7 +17,8 @@ def all_plant_records():
     plant_records = db.session.scalars(stmt).all()
     return PlantRecordSchema(many=True).dump(plant_records)
 
-@plantrecords_bp.route('/plantrecords/<int:plantrecord_id>')
+# Get one plant record
+@plantrecords_bp.route('/<int:plantrecord_id>')
 def one_plantrecord(plantrecord_id):
     stmt = db.select(PlantRecord).filter_by(id=plantrecord_id)
     plant_record = db.session.scalar(stmt)
@@ -24,3 +26,7 @@ def one_plantrecord(plantrecord_id):
         return PlantRecordSchema().dump(plant_record)
     else:
         return {'error': 'Plant Record not found'}, 404
+    
+# # Create a new plant record
+# @plantrecords_bp.route('/', methods=['POST'])
+# def create_plantrecord():
