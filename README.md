@@ -6,7 +6,7 @@ A few years ago, I started planning and establishing my first garden in the beau
 
 The Garden Planner API was built using Flask to solve the problem of a person not being able to keep track of all of their trees and/or plants. It aims to be a central repository for a user to log details about the plants and trees they have in their outdoor and indoor spaces. It abides by full CRUD functionality by enabling the user to:
 
-- Create new entries/records for the plants or trees they obtain with attributes for name, the plant's preferred location, the watering and fertilisation rates, as well as a space for additonal comments.
+- Create new entries/records for the plants or trees they obtain with attributes for name, the plant's preferred location, the watering and fertilisation rates, as well as a space for additional comments.
 - Create areas where plants/trees belong, as well as spaces within those areas. For example, a user's "Backyard" area might contain multiple spaces or gardens.
 - Access entries they have entered in order to be reminded about a plant's upkeep.
 - Update plant records at any point.
@@ -20,10 +20,55 @@ There are a number of reasons why the Garden Planner application was built and h
 
 - The Garden Planner API simplifies and unifies the process of plant and tree record keeping. For me personally, I was finding it overwhelming managing how to log when I had last watered, fertilised, transplanted or repotted my plants and I was finding that I was "solving" this problem by logging reminders in different applications, keeping tab of the plant information slips coming back with the plant from a nursery, or simply just having to look and see what the plant was requiring at any given moment. This method of garden management was cumbersome and it was difficult to maintain accuracy and a method of record-keeping. The simple process of entering data in fields such as plants and planting spaces allows for the user to keep tab of their plant varieties in a single, organised location.
 - The application does not prefill the data entry fields with irrelevant information about plant upkeep from other countries with different climates to Australia. The user can enter accurate and relevant information, often obtained by simply looking over the slip that comes with each plant.
-- The user can tailor the application to their needs, making it as simple or detailed as they need. It's designed to be flexible, allowing the user to input data that reflects their space. This solves the problem identied in R1 above by giving the user an opportunity to record all their plant species and planting locations in an organised manner.
+- The user can tailor the application to their needs, making it as simple or detailed as they need. It's designed to be flexible, allowing the user to input data that reflects their space. This solves the problem identified in R1 above by giving the user an opportunity to record all their plant species and planting locations in an organised manner.
 - As our gardens change and update, the Garden Planner API allows for full CRUD functionality across the various entities. This solves the problem of not being able to easily remember how to care for our gardens as they grow.
 
-## R3 - Relational Database Management System (DBMS)
+## R3 - Evaluation of Relational Databases and PostgreSQL
+
+### Relational Databases
+
+According to IBM, database management systems (DBMS) are categorised according to their data structures or types, with common examples being:
+
+- inverted list,
+- hierarchic,
+- network, and
+- relational (/What is a database management system?/).
+
+Using a DBMS for the Garden Planner API has allowed for a full suite of data manipulation tools (DML) as well as tools for management of the database structure itself (DDL). There are many distinct advantages to DBMS, in general, including:
+
+- easier data handling,
+- security and privacy,
+- a reduction in data inconsistency and redundancy,
+- ease of use, and
+- abstraction (/Advantages of Database Management System/).
+
+However, DBMS do differ and each system has advantages and disadvantages. A hierarchical model, for example, would be well suited to data that stays relatively static. However, this Garden Planner API requires a dynamism in its data structures as well as its data.
+
+Given this, and after careful consideration, it was decided that a relational database management system was the most advantageous choice for the Garden Planner API. The primary reason for this decision was that this form of DBMS provides the ability to join tables together, therefore showing a relationship between data or how tables connect (/Benefits of relational databases/). The API needs to solve an organisational problem for its users as identified in R1 and R2 above. Given this, an organised solution to data storage, as exemplified through relational DBMS, allows the user to see the relationships between entities. For example, the user can log details of plant species in their garden (`PlantRecords`), and as the garden develops, they can add instances of this `plantrecord` in another entity (`Plants`). These `plants` can belong to multiple `spaces` and these `spaces` can be contained within `areas`. In a DBMS like PostgreSQL, entities/tables can be easily through Structured Query Language (SQL) and populated with data through queries.
+
+Using a relational DBMS also assists the user in eliminating redundancies. This is primarily achieved through a process known as data normalisation. Normalisation is the process of creating tables and table relationships that make the database flexible or alterable, eliminating redundancies and inconsistent dependencies (/Description of the database normalization basics/). To illustrate, if the Garden Planner database stored data regarding plants in multiple tables in the database, maintaining this information would be tedious and error prone. This data should only be located in one table and this process of normalising data is achieved through a three-step process of 1NF, 2NF and 3NF.
+
+In a relational DBMS, data structure is predefined and table-based. This might be a disadvantage compared to the greater freedoms provided in non-relational databases to represent data in key-value pairs, documents, column-families or graphs, however, tables are an apt solution for the data collected in this instance.
+
+Relational DBMS may be slower in performance in some use cases; however, big data and real-time processing were not required for this application. Indeed, relational DBMS do have more limited scalability than non-relational databases, but at this stage of the development process, this is not a concern. 
+
+### PostgreSQL
+
+PostgreSQL was chosen for the Garden Planner API because it is a ubiquitous relational DBMS used with Flask applications that is open-source. This makes it a free application that brings with it the freedom to use, modify and implement it to suit business needs (/What is PostgreSQL?/). Additionally, PostgreSQL supports a range of features, including support for:
+
+- writing database functions in a range of languages, including Python, JavaScript and Shell;
+- a large number of data types from basic types such as numeric and string, geometric types, JSON, monetary types, dates and arrays. PostgreSQL also allows the user to define their own complex data types (/The benefits of PostgreSQL/);
+- full-text search;
+- a variety of business sizes and needs as a result of its robust authentication, access control and privilege management systems (/The benefits of PostgreSQL/);
+- views, for information that is often queried;
+- attaching comments; and
+- write-ahead logging so the data can be recovered after a software crash.
+
+Like most other relational DBMS, PostgreSQL allows the user to store data in tables and query, modify and retrieve that data using relational algebra techniques through structured query language (SQL); however, PostgreSQL is technically an Object-Relational DBMS, meaning it has some additional functionality (/The benefits of PostgreSQL/). This includes defining complex data types, inheritance and overloading functions (/The benefits of PostgreSQL/).
+
+PostgreSQL has a large and active community of users and is well-supported with documentation and help guides.
+
+Despite the numerous advantages listed above, PostgreSQL is comparatively slower than other DBMS such as MySQL. Additionally, not all open source applications support it. As it is open source and managed by many, compatibility and version update issues may arise.
 
 ## R4 - Functionality and Benefits of an Object Relational Mapper (ORM)
 
@@ -60,3 +105,17 @@ The following is the expected response from the `/register` endpoint using sampl
 ## R9 - Database Relations
 
 ## R10 - Project Management
+
+## Works Cited
+
+/Advantages of Database Management System (DBMS)/, Java T Point, https://www.javatpoint.com/advantages-of-dbms. Accessed 28 June 2023.
+
+/Benefits of relational databases/, IBM, https://www.ibm.com/topics/relational-databases#:~:text=The%20primary%20benefit%20of%20the,group%2C%20and%20also%20combine%20queries. Accessed 28 June 2023.
+
+/Description of the database normalization basics/, Microsoft, https://learn.microsoft.com/en-us/office/troubleshoot/access/database-normalization-description. Accessed 28 June 2023.
+
+/The benefits of PostgreSQL/, Prisma's Data Guide, https://www.prisma.io/dataguide/postgresql/benefits-of-postgresql. Accessed 28 June 2023.
+
+/What is a database management system?/ IBM, https://www.ibm.com/docs/en/zos-basic-skills?topic=zos-what-is-database-management-system. Accessed 28 June 2023.
+
+/What is PostgreSQL?/ LinkedIn, https://www.linkedin.com/pulse/what-postgresql-introduction-advantages-disadvantages-ankita-sharda. Accessed 28 June 2023.
