@@ -8,9 +8,9 @@ class Space(db.Model):
     
     name = db.Column(db.String(100))
 
-    area_id = db.Column(db.Integer, db.ForeignKey('areas.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship('User', back_populates='spaces')
+    area_id = db.Column(db.Integer, db.ForeignKey('areas.id', ondelete='CASCADE'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    user = db.relationship('User', back_populates='spaces', cascade='all, delete')
 
 class SpaceSchema(ma.Schema):
     user = fields.Nested('UserSchema', exclude=['password'])

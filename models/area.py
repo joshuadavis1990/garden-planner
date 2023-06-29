@@ -10,8 +10,8 @@ class Area(db.Model):
     is_outdoor = db.Column(db.Boolean())
     is_indoor = db.Column(db.Boolean())
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship('User', back_populates='areas')
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    user = db.relationship('User', back_populates='areas', cascade='all, delete')
 
 class AreaSchema(ma.Schema):
     # Tell Marshmallow to use UserSchema to serialize the 'user' field

@@ -13,8 +13,8 @@ class PlantRecord(db.Model):
     fertilisation_rate = db.Column(db.Text())
     other_comments = db.Column(db.Text())
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship('User', back_populates='plantrecords')
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    user = db.relationship('User', back_populates='plantrecords', cascade='all, delete')
 
 class PlantRecordSchema(ma.Schema):
     user = fields.Nested('UserSchema', exclude=['password'])

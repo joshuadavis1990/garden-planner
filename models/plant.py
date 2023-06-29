@@ -9,10 +9,10 @@ class Plant(db.Model):
     date_planted = db.Column(db.Date())
     date_fertilised = db.Column(db.Date())
 
-    space_id = db.Column(db.Integer, db.ForeignKey('spaces.id'), nullable=False)
-    plantrecord_id = db.Column(db.Integer, db.ForeignKey('plantrecords.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship('User', back_populates='plants')
+    space_id = db.Column(db.Integer, db.ForeignKey('spaces.id', ondelete='CASCADE'), nullable=False)
+    plantrecord_id = db.Column(db.Integer, db.ForeignKey('plantrecords.id', ondelete='CASCADE'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    user = db.relationship('User', back_populates='plants', cascade='all, delete')
 
 class PlantSchema(ma.Schema):
     user = fields.Nested('UserSchema', exclude=['password'])

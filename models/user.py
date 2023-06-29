@@ -12,10 +12,10 @@ class User(db.Model):
     password = db.Column(db.String, nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
 
-    areas = db.relationship('Area', back_populates='user')
-    spaces = db.relationship('Space', back_populates='user')
-    plantrecords = db.relationship('PlantRecord', back_populates='user')
-    plants = db.relationship('Plant', back_populates='user')
+    areas = db.relationship('Area', back_populates='user', cascade='all, delete')
+    spaces = db.relationship('Space', back_populates='user', cascade='all, delete')
+    plantrecords = db.relationship('PlantRecord', back_populates='user', cascade='all, delete')
+    plants = db.relationship('Plant', back_populates='user', cascade='all, delete')
 
 class UserSchema(ma.Schema):
     areas = fields.List(fields.Nested('AreaSchema', exclude=['user', 'id', 'is_outdoor', 'is_indoor']))
