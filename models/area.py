@@ -12,10 +12,12 @@ class Area(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     user = db.relationship('User', back_populates='areas', cascade='all, delete')
+    spaces = db.relationship('Space', back_populates='area', cascade='all, delete')
 
 class AreaSchema(ma.Schema):
     # Tell Marshmallow to use UserSchema to serialize the 'user' field
-    user = fields.Nested('UserSchema', exclude=['password', 'areas'])
+    user = fields.Nested('UserSchema', exclude=['password', 'areas', 'spaces'])
+    spaces = fields.List(fields.Nested('SpaceSchema', only=['name']))
 
     class Meta:
-        fields = ('id', 'name', 'is_outdoor', 'is_indoor', 'user')
+        fields = ('id', 'name', 'is_outdoor', 'is_indoor', 'user', 'spaces')

@@ -18,9 +18,9 @@ class User(db.Model):
     plants = db.relationship('Plant', back_populates='user', cascade='all, delete')
 
 class UserSchema(ma.Schema):
-    areas = fields.List(fields.Nested('AreaSchema', exclude=['user', 'id', 'is_outdoor', 'is_indoor']))
+    areas = fields.List(fields.Nested('AreaSchema', only=['name', 'is_outdoor', 'is_indoor']))
     spaces = fields.List(fields.Nested('SpaceSchema', exclude=['user', 'id']))
 
 
     class Meta:
-        fields = ('f_name', 'l_name', 'email', 'password', 'is_admin', 'areas', 'spaces')
+        fields = ('f_name', 'l_name', 'email', 'password', 'areas', 'spaces')

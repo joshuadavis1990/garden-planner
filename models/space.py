@@ -11,9 +11,11 @@ class Space(db.Model):
     area_id = db.Column(db.Integer, db.ForeignKey('areas.id', ondelete='CASCADE'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     user = db.relationship('User', back_populates='spaces', cascade='all, delete')
+    area = db.relationship('Area', back_populates='spaces', cascade='all, delete')
 
 class SpaceSchema(ma.Schema):
-    user = fields.Nested('UserSchema', exclude=['password'])
+    user = fields.Nested('UserSchema', exclude=['password', 'areas', 'spaces'])
+    area = fields.Nested('AreaSchema', only=['name', 'is_outdoor', 'is_indoor'])
 
     class Meta:
-        fields = ('id', 'name', 'area_id', 'user')
+        fields = ('id', 'name', 'area_id', 'user', 'area')
