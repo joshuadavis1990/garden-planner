@@ -12,6 +12,8 @@ class PlantRecord(db.Model):
     fertilisation_rate = db.Column(db.Text())
     other_comments = db.Column(db.Text())
 
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
 class PlantRecordSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'name', 'description', 'preferred_location', 'water_rate', 'fertilisation_rate', 'other_comments')
+        fields = ('id', 'name', 'description', 'preferred_location', 'water_rate', 'fertilisation_rate', 'other_comments', 'user_id')

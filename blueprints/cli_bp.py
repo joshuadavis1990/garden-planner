@@ -105,7 +105,8 @@ def seed_db():
             preferred_location = 'Partial sun',
             water_rate = 'Average',
             fertilisation_rate = 'Key feeding times are autumn as buds are developing and in spring once flowering has finished.',
-            other_comments = 'Keep the plant moist but well-drained.'
+            other_comments = 'Keep the plant moist but well-drained.',
+            user_id = users[0].id
         ),
         PlantRecord(
             name = 'Pansy',
@@ -113,7 +114,8 @@ def seed_db():
             preferred_location = 'Partial sun',
             water_rate = 'Average',
             fertilisation_rate = 'Use a controlled release fertiliser when planting.',
-            other_comments = 'Keep the plant moist but well-drained.'
+            other_comments = 'Keep the plant moist but well-drained.',
+            user_id = users[0].id
         )
     ]
 
@@ -127,13 +129,15 @@ def seed_db():
             date_planted = None,
             date_fertilised = None,
             space_id = spaces[0].id,
-            plantrecord_id = plant_records[0].id
+            plantrecord_id = plant_records[0].id,
+            user_id = users[0].id
         ),
         Plant(
             date_planted = None,
             date_fertilised = None,
             space_id = spaces[0].id,
-            plantrecord_id = plant_records[1].id
+            plantrecord_id = plant_records[1].id,
+            user_id = users[0].id
         )
     ]
     

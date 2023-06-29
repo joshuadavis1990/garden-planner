@@ -10,7 +10,8 @@ class Plant(db.Model):
 
     space_id = db.Column(db.Integer, db.ForeignKey('spaces.id'), nullable=False)
     plantrecord_id = db.Column(db.Integer, db.ForeignKey('plantrecords.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
 class PlantSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'date_planted', 'date_fertilised', 'space_id', 'plantrecord_id')
+        fields = ('id', 'date_planted', 'date_fertilised', 'space_id', 'plantrecord_id', 'user_id')

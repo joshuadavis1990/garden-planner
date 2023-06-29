@@ -41,7 +41,8 @@ def create_plantrecord():
         preferred_location = plantrecord_info['preferred_location'],
         water_rate = plantrecord_info['water_rate'],
         fertilisation_rate = plantrecord_info['fertilisation_rate'],
-        other_comments = plantrecord_info['other_comments']
+        other_comments = plantrecord_info['other_comments'],
+        user_id = plantrecord_info['user_id']
     )
     # Add and commit the new plant record to the session
     db.session.add(plantrecord)
