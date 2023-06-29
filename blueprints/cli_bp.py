@@ -126,23 +126,6 @@ def seed_db():
         Plant(
             date_planted = None,
             date_fertilised = None,
-            space_id = spaces[0].id
-        ),
-        Plant(
-            date_planted = None,
-            date_fertilised = None,
-            space_id = spaces[0].id
-        )
-    ]
-
-    db.session.query(Plant).delete()
-    db.session.commit()
-
-    # Create separate instances of the Plant model in memory
-    plants = [
-        Plant(
-            date_planted = None,
-            date_fertilised = None,
             space_id = spaces[0].id,
             plantrecord_id = plant_records[0].id
         ),
@@ -157,6 +140,5 @@ def seed_db():
     db.session.query(Plant).delete()
     db.session.add_all(plants)
     db.session.commit()
-
 
     print('Models seeded')

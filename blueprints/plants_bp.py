@@ -37,8 +37,6 @@ def create_plant():
         date_fertilised = plant_info['date_fertilised'],
         space_id = plant_info['space_id'],
         plantrecord_id = plant_info['plantrecord_id']
-        date_fertilised = plant_info['date_fertilised'],
-        space_id = plant_info['space_id']
     )
     # Add and commit the new plant to the session
     db.session.add(plant)
