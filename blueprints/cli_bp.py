@@ -101,7 +101,7 @@ def seed_db():
     plant_records = [
         PlantRecord(
             name = 'Camellia',
-            description = 'Camellias are attractive evergreen shrubs with a variety of flower colours.',
+            description = 'Camellias are attrative evergreen shrubs with a variety of flower colours.',
             preferred_location = 'Partial sun',
             water_rate = 'Average',
             fertilisation_rate = 'Key feeding times are autumn as buds are developing and in spring once flowering has finished.',
@@ -126,6 +126,23 @@ def seed_db():
         Plant(
             date_planted = None,
             date_fertilised = None,
+            space_id = spaces[0].id
+        ),
+        Plant(
+            date_planted = None,
+            date_fertilised = None,
+            space_id = spaces[0].id
+        )
+    ]
+
+    db.session.query(Plant).delete()
+    db.session.commit()
+
+    # Create separate instances of the Plant model in memory
+    plants = [
+        Plant(
+            date_planted = None,
+            date_fertilised = None,
             space_id = spaces[0].id,
             plantrecord_id = plant_records[0].id
         ),
@@ -140,5 +157,6 @@ def seed_db():
     db.session.query(Plant).delete()
     db.session.add_all(plants)
     db.session.commit()
+
 
     print('Models seeded')
