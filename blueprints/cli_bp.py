@@ -43,36 +43,6 @@ def seed_db():
     db.session.add_all(users)
     db.session.commit()
 
-    # Create separate instances of the PlantRecord model in memory
-    plant_records = [
-        PlantRecord(
-            name = 'Camellia',
-            description = 'Camellias are attrative evergreen shrubs with a variety of flower colours.',
-            preferred_location = 'Partial sun',
-            water_rate = 'Average',
-            fertilisation_rate = 'Key feeding times are autumn as buds are developing and in spring once flowering has finished.',
-            other_comments = 'Keep the plant moist but well-drained.'
-        ),
-        PlantRecord(
-            name = 'Pansy',
-            description = 'A large-flowered hybrid plant cultivated as a garden flower.',
-            preferred_location = 'Partial sun',
-            water_rate = 'Average',
-            fertilisation_rate = 'Use a controlled release fertiliser when planting.',
-            other_comments = 'Keep the plant moist but well-drained.'
-        )
-    ]
-    # Create separate instances of the Plant model in memory
-    plants = [
-        Plant(
-            date_planted = None,
-            date_fertilised = None
-        ),
-        Plant(
-            date_planted = None,
-            date_fertilised = None
-        )
-    ]
     # Create separate instances of the Area model in memory
     areas = [
         Area(
@@ -123,13 +93,50 @@ def seed_db():
         )
     ]
 
-    db.session.query(PlantRecord).delete()
-    db.session.query(Plant).delete()
     db.session.query(Space).delete()
-
-    db.session.add_all(plant_records)
-    db.session.add_all(plants)
     db.session.add_all(spaces)
-
     db.session.commit()
+
+    # Create separate instances of the PlantRecord model in memory
+    plant_records = [
+        PlantRecord(
+            name = 'Camellia',
+            description = 'Camellias are attrative evergreen shrubs with a variety of flower colours.',
+            preferred_location = 'Partial sun',
+            water_rate = 'Average',
+            fertilisation_rate = 'Key feeding times are autumn as buds are developing and in spring once flowering has finished.',
+            other_comments = 'Keep the plant moist but well-drained.'
+        ),
+        PlantRecord(
+            name = 'Pansy',
+            description = 'A large-flowered hybrid plant cultivated as a garden flower.',
+            preferred_location = 'Partial sun',
+            water_rate = 'Average',
+            fertilisation_rate = 'Use a controlled release fertiliser when planting.',
+            other_comments = 'Keep the plant moist but well-drained.'
+        )
+    ]
+
+    db.session.query(PlantRecord).delete()
+    db.session.add_all(plant_records)
+    db.session.commit()
+
+    # Create separate instances of the Plant model in memory
+    plants = [
+        Plant(
+            date_planted = None,
+            date_fertilised = None,
+            space_id = spaces[0].id
+        ),
+        Plant(
+            date_planted = None,
+            date_fertilised = None,
+            space_id = spaces[0].id
+        )
+    ]
+
+    db.session.query(Plant).delete()
+    db.session.add_all(plants)
+    db.session.commit()
+
     print('Models seeded')
