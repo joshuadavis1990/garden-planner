@@ -72,7 +72,7 @@ def login():
         user = db.session.scalar(stmt)
         if user and bcrypt.check_password_hash(user.password, request.json['password']):
             token = create_access_token(identity=user.id, expires_delta=timedelta(days=1))
-            return {'token': token, 'user': UserSchema(exclude=['password', 'spaces']).dump(user)}
+            return {'token': token, 'user': UserSchema(exclude=['password', 'spaces', 'areas']).dump(user)}
         else:
             return {'error': 'Invalid email address or password'}, 401
     except KeyError:
