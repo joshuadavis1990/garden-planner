@@ -7,6 +7,8 @@ class Space(db.Model):
     
     name = db.Column(db.String(100))
 
+    area_id = db.Column(db.Integer, db.ForeignKey('areas.id'), nullable=False)
+
 class SpaceSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'area_id')

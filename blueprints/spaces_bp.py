@@ -34,7 +34,8 @@ def create_space():
     space_info = SpaceSchema().load(request.json)
     # Create a new Space instance from the space_info
     space = Space(
-        name = space_info['name']
+        name = space_info['name'],
+        area_id = space_info['area_id']
     )
     # Add and commit the new space to the session
     db.session.add(space)

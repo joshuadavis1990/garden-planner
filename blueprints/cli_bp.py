@@ -94,30 +94,35 @@ def seed_db():
             user_id = users[1].id
         )
     ]
-    # Create separate instances of the Space model in memory
-    spaces = [
-        Space(
-            name = 'Rose Garden'
-        ),
-        Space(
-            name = 'Window Garden'
-        ),
-        Space(
-            name = 'Living Room'
-        ),
-        Space(
-            name = 'Kitchen'
-        ),
-        Space(
-            name = 'Vegetable Garden'
-        )
-    ]
 
     db.session.query(Area).delete()
     db.session.add_all(areas)
     db.session.commit()
 
-    
+    # Create separate instances of the Space model in memory
+    spaces = [
+        Space(
+            name = 'Rose Garden',
+            area_id = areas[0].id
+        ),
+        Space(
+            name = 'Window Garden',
+            area_id = areas[0].id
+        ),
+        Space(
+            name = 'Living Room',
+            area_id = areas[2].id
+        ),
+        Space(
+            name = 'Kitchen',
+            area_id = areas[2].id
+        ),
+        Space(
+            name = 'Vegetable Garden',
+            area_id = areas[1].id
+        )
+    ]
+
     db.session.query(PlantRecord).delete()
     db.session.query(Plant).delete()
     db.session.query(Space).delete()
