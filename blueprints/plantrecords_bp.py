@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from models.plantrecord import PlantRecord, PlantRecordSchema
 from init import db
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from blueprints.auth_bp import admin_required
 
 plantrecords_bp = Blueprint('plantrecords', __name__, url_prefix='/plantrecords')
@@ -42,7 +42,7 @@ def create_plantrecord():
         water_rate = plantrecord_info['water_rate'],
         fertilisation_rate = plantrecord_info['fertilisation_rate'],
         other_comments = plantrecord_info['other_comments'],
-        user_id = plantrecord_info['user_id']
+        user_id = get_jwt_identity()
     )
     # Add and commit the new plant record to the session
     db.session.add(plantrecord)

@@ -1,4 +1,5 @@
 from init import db, ma
+from marshmallow import fields
 
 class Area(db.Model):
     __tablename__ = 'areas'
@@ -10,7 +11,11 @@ class Area(db.Model):
     is_indoor = db.Column(db.Boolean())
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('User', back_populates='areas')
 
 class AreaSchema(ma.Schema):
+    # Tell Marshmallow to use UserSchema to serialize the 'user' field
+    user = fields.Nested('UserSchema', exclude=['password', 'areas'])
+
     class Meta:
-        fields = ('id', 'name', 'is_outdoor', 'is_indoor', 'user_id')
+        fields = ('id', 'name', 'is_outdoor', 'is_indoor', 'user')

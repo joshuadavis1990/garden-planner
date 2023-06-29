@@ -7,7 +7,6 @@ from blueprints.plantrecords_bp import plantrecords_bp
 from blueprints.plants_bp import plants_bp
 from blueprints.areas_bp import areas_bp
 from blueprints.spaces_bp import spaces_bp
-from blueprints.users_bp import users_bp
 
 # Factory function for creating and configuring an object, 'app', and returning it
 def setup():
@@ -31,6 +30,5 @@ def setup():
     app.register_blueprint(plants_bp)
     app.register_blueprint(areas_bp)
     app.register_blueprint(spaces_bp)
-    app.register_blueprint(users_bp)
 
     return app

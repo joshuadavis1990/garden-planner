@@ -35,7 +35,8 @@ def create_space():
     # Create a new Space instance from the space_info
     space = Space(
         name = space_info['name'],
-        area_id = space_info['area_id']
+        area_id = space_info['area_id'],
+        user_id = space_info['user_id']
     )
     # Add and commit the new space to the session
     db.session.add(space)

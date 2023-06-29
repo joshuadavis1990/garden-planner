@@ -1,4 +1,5 @@
 from init import db, ma
+from marshmallow import fields
 
 class PlantRecord(db.Model):
     __tablename__ = 'plantrecords'
@@ -13,7 +14,10 @@ class PlantRecord(db.Model):
     other_comments = db.Column(db.Text())
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('User', back_populates='plantrecords')
 
 class PlantRecordSchema(ma.Schema):
+    user = fields.Nested('UserSchema', exclude=['password'])
+
     class Meta:
-        fields = ('id', 'name', 'description', 'preferred_location', 'water_rate', 'fertilisation_rate', 'other_comments', 'user_id')
+        fields = ('id', 'name', 'description', 'preferred_location', 'water_rate', 'fertilisation_rate', 'other_comments', 'user')

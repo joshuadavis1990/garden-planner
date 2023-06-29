@@ -73,23 +73,28 @@ def seed_db():
     spaces = [
         Space(
             name = 'Rose Garden',
-            area_id = areas[0].id
+            area_id = areas[0].id,
+            user_id = users[0].id
         ),
         Space(
             name = 'Window Garden',
-            area_id = areas[0].id
+            area_id = areas[0].id,
+            user_id = users[1].id
         ),
         Space(
             name = 'Living Room',
-            area_id = areas[2].id
+            area_id = areas[2].id,
+            user_id = users[2].id
         ),
         Space(
             name = 'Kitchen',
-            area_id = areas[2].id
+            area_id = areas[2].id,
+            user_id = users[0].id
         ),
         Space(
             name = 'Vegetable Garden',
-            area_id = areas[1].id
+            area_id = areas[1].id,
+            user_id = users[1].id
         )
     ]
 
@@ -101,7 +106,7 @@ def seed_db():
     plant_records = [
         PlantRecord(
             name = 'Camellia',
-            description = 'Camellias are attrative evergreen shrubs with a variety of flower colours.',
+            description = 'Camellias are attractive evergreen shrubs with a variety of flower colours.',
             preferred_location = 'Partial sun',
             water_rate = 'Average',
             fertilisation_rate = 'Key feeding times are autumn as buds are developing and in spring once flowering has finished.',
