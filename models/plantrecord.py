@@ -4,6 +4,7 @@ class PlantRecord(db.Model):
     __tablename__ = 'plantrecords'
 
     id = db.Column(db.Integer, primary_key=True)
+    
     name = db.Column(db.String(100))
     description = db.Column(db.Text())
     preferred_location = db.Column(db.String(50))

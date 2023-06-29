@@ -4,6 +4,7 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
+    
     f_name = db.Column(db.String)
     l_name = db.Column(db.String)
     email = db.Column(db.String, nullable=False, unique=True)

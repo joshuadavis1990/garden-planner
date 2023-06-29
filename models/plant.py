@@ -4,6 +4,7 @@ class Plant(db.Model):
     __tablename__ = 'plants'
 
     id = db.Column(db.Integer, primary_key=True)
+    
     date_planted = db.Column(db.Date())
     date_fertilised = db.Column(db.Date())
 

@@ -52,7 +52,8 @@ def create_area():
     area = Area(
         name = area_info['name'],
         is_outdoor = area_info['is_outdoor'],
-        is_indoor = area_info['is_indoor']
+        is_indoor = area_info['is_indoor'],
+        user_id = area_info['user_id']
     )
     # Add and commit the new area to the session
     db.session.add(area)

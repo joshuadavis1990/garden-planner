@@ -38,6 +38,11 @@ def seed_db():
             password = bcrypt.generate_password_hash('makeamericagreat').decode('utf-8')
         )
     ]
+
+    db.session.query(User).delete()
+    db.session.add_all(users)
+    db.session.commit()
+
     # Create separate instances of the PlantRecord model in memory
     plant_records = [
         PlantRecord(
@@ -73,17 +78,20 @@ def seed_db():
         Area(
             name = 'Frontyard',
             is_outdoor = True,
-            is_indoor = False
+            is_indoor = False,
+            user_id = users[0].id
         ),
         Area(
             name = 'Backyard',
             is_outdoor = True,
-            is_indoor = False
+            is_indoor = False,
+            user_id = users[0].id
         ),
         Area(
             name = 'House',
             is_outdoor = False,
-            is_indoor = True
+            is_indoor = True,
+            user_id = users[1].id
         )
     ]
     # Create separate instances of the Space model in memory
@@ -105,20 +113,18 @@ def seed_db():
         )
     ]
 
-    # Truncate the tables
-    db.session.query(User).delete()
+    db.session.query(Area).delete()
+    db.session.add_all(areas)
+    db.session.commit()
+
+    
     db.session.query(PlantRecord).delete()
     db.session.query(Plant).delete()
-    db.session.query(Area).delete()
     db.session.query(Space).delete()
 
-    # Add each user to the session (transaction)
-    db.session.add_all(users)
     db.session.add_all(plant_records)
     db.session.add_all(plants)
-    db.session.add_all(areas)
     db.session.add_all(spaces)
 
-    # Commit the users to the database
     db.session.commit()
     print('Models seeded')
