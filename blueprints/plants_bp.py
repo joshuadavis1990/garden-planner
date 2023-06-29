@@ -34,7 +34,9 @@ def create_plant():
     plant_info = PlantSchema().load(request.json)
     plant = Plant(
         date_planted = date.today(),
-        date_fertilised = plant_info['date_fertilised']
+        date_fertilised = plant_info['date_fertilised'],
+        space_id = plant_info['space_id'],
+        plantrecord_id = plant_info['plantrecord_id']
     )
     # Add and commit the new plant to the session
     db.session.add(plant)
