@@ -15,7 +15,7 @@ def all_users():
     # Select all entries in the PlantRecord table and return them as a JSON object
     stmt = db.select(User).order_by(User.id)
     users = db.session.scalars(stmt).all()
-    return UserSchema(many=True, exclude=['password']).dump(users)
+    return UserSchema(many=True, exclude=['password', 'spaces']).dump(users)
 
 # Get one user
 @auth_bp.route('/users/<int:user_id>')
@@ -30,7 +30,7 @@ def one_user(user_id):
         return {'error': 'User not found'}, 404
 
 # Delete a user
-@auth_bp.route('users/<int:user_id>', methods=['DELETE'])
+@auth_bp.route('/users/<int:user_id>', methods=['DELETE'])
 @jwt_required()
 def delete_user(user_id):
     admin_required()

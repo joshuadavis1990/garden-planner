@@ -112,7 +112,7 @@ The following is the expected response from the `auth/login` endpoint using samp
 #### `auth/users`
 
 - HTTP Request Verb: GET
-- Description: Allows a user with admin credentials to obtain a JSON list of all registered users. The server response includes data regarding areas and spaces owned by those users.
+- Description: Allows a user with admin credentials to obtain a JSON list of all registered users. The server response includes nested data regarding areas owned by those users.
 - Required Data: 'email', 'password'
 - Authentication Methods: `@jwt_required()`, `admin_required()`
 
@@ -135,27 +135,7 @@ The following is the expected response from the `auth/users` endpoint using samp
     ],
     "email": "14209@coderacademy.edu.au",
     "f_name": "Joshua",
-    "l_name": "Davis",
-    "spaces": [
-      {
-        "area": {
-          "is_indoor": false,
-          "is_outdoor": true,
-          "name": "Frontyard"
-        },
-        "area_id": 1,
-        "name": "Rose Garden"
-      },
-      {
-        "area": {
-          "is_indoor": true,
-          "is_outdoor": false,
-          "name": "House"
-        },
-        "area_id": 3,
-        "name": "Kitchen"
-      }
-    ]
+    "l_name": "Davis"
   },
   {
     "areas": [
@@ -167,47 +147,77 @@ The following is the expected response from the `auth/users` endpoint using samp
     ],
     "email": "neilarmstrong@gmail.com",
     "f_name": "Neil",
-    "l_name": "Armstrong",
-    "spaces": [
-      {
-        "area": {
-          "is_indoor": false,
-          "is_outdoor": true,
-          "name": "Frontyard"
-        },
-        "area_id": 1,
-        "name": "Window Garden"
-      },
-      {
-        "area": {
-          "is_indoor": false,
-          "is_outdoor": true,
-          "name": "Backyard"
-        },
-        "area_id": 2,
-        "name": "Vegetable Garden"
-      }
-    ]
+    "l_name": "Armstrong"
   },
   {
     "areas": [],
     "email": "donaldtrump@gmail.com",
     "f_name": "Donald",
-    "l_name": "Trump",
-    "spaces": [
-      {
-        "area": {
-          "is_indoor": true,
-          "is_outdoor": false,
-          "name": "House"
-        },
-        "area_id": 3,
-        "name": "Living Room"
-      }
-    ]
+    "l_name": "Trump"
   }
 ]
 ```
+
+#### `auth/users/<int:user_id>`
+
+- HTTP Request Verb: GET
+- Description: Allows a user with admin credentials to obtain a single record for the specified user in the URI using their user ID. The server response includes nested data regarding areas owned by that user.
+- Required Data: 'email', 'password'
+- Authentication Methods: `@jwt_required()`, `admin_required()`
+
+The following is the expected response from the `/users/<int:user_id>` endpoint using sample data:
+
+```
+{
+  "areas": [
+    {
+      "is_indoor": false,
+      "is_outdoor": true,
+      "name": "Frontyard"
+    },
+    {
+      "is_indoor": false,
+      "is_outdoor": true,
+      "name": "Backyard"
+    }
+  ],
+  "email": "14209@coderacademy.edu.au",
+  "f_name": "Joshua",
+  "l_name": "Davis",
+  "spaces": [
+    {
+      "area": {
+        "is_indoor": false,
+        "is_outdoor": true,
+        "name": "Frontyard"
+      },
+      "area_id": 1,
+      "name": "Rose Garden"
+    },
+    {
+      "area": {
+        "is_indoor": true,
+        "is_outdoor": false,
+        "name": "House"
+      },
+      "area_id": 3,
+      "name": "Kitchen"
+    }
+  ]
+}
+
+```
+
+#### `auth/users/<int:user_id>`
+
+- HTTP Request Verb: DELETE
+- Description: Allows a user with admin credentials to delete a user from the database.
+- Required Data: 'email', 'password'
+- Authentication Methods: `@jwt_required()`, `admin_required()`
+
+The following is the expected response from the `/users/<int:user_id>` endpoint using sample data: `{}` and error code `200`.
+
+
 
 ### User Routes
 
