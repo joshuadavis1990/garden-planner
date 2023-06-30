@@ -106,8 +106,9 @@ The following is the expected response from the `/register` endpoint using sampl
 
 ### Plant Routes
 
-
 ## R6 - Entity Relationship Diagram (ERD)
+
+![ERD](docs/erd.png)  
 
 ## R7 - Third Party Services
 
