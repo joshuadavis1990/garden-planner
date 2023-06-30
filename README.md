@@ -90,22 +90,145 @@ SQLAlchemy provides extensive help documentation for understanding its comprehen
 #### `auth/register`
 
 - HTTP Request Verb: POST
-- Description: Allows a new user to register 
-- Required Data: 
+- Description: Allows a new user to register their first name, last name, email and password and create an account with the Garden Planner application. This data is added to the `users` database entity.
+- Required Data: 'f_name', 'l_name', 'email', 'password'
 - Authentication Methods: None
 
 The following is the expected response from the `auth/register` endpoint using sample data:
 
+![ERD](docs/register.png)
+
 #### `auth/login`
 
 - HTTP Request Verb: POST
-- Description: Allows a new user to login with their registered credentials
+- Description: Allows a new user to login with their registered credentials. The response is a JWT token and user summary, excluding password.
 - Required Data: 'email', 'password'
-- Authentication Methods: None
+- Authentication Methods: A JWT token is returned to the server for authentication and authorisation purposes.
 
 The following is the expected response from the `auth/login` endpoint using sample data:
 
 ![ERD](docs/login.png)
+
+#### `auth/users`
+
+- HTTP Request Verb: GET
+- Description: Allows a user with admin credentials to obtain a JSON list of all registered users. The server response includes data regarding areas and spaces owned by those users.
+- Required Data: 'email', 'password'
+- Authentication Methods: `@jwt_required()`, `admin_required()`
+
+The following is the expected response from the `auth/users` endpoint using sample data:
+
+```
+[
+  {
+    "areas": [
+      {
+        "is_indoor": false,
+        "is_outdoor": true,
+        "name": "Frontyard"
+      },
+      {
+        "is_indoor": false,
+        "is_outdoor": true,
+        "name": "Backyard"
+      }
+    ],
+    "email": "14209@coderacademy.edu.au",
+    "f_name": "Joshua",
+    "l_name": "Davis",
+    "spaces": [
+      {
+        "area": {
+          "is_indoor": false,
+          "is_outdoor": true,
+          "name": "Frontyard"
+        },
+        "area_id": 1,
+        "name": "Rose Garden"
+      },
+      {
+        "area": {
+          "is_indoor": true,
+          "is_outdoor": false,
+          "name": "House"
+        },
+        "area_id": 3,
+        "name": "Kitchen"
+      }
+    ]
+  },
+  {
+    "areas": [
+      {
+        "is_indoor": true,
+        "is_outdoor": false,
+        "name": "House"
+      }
+    ],
+    "email": "neilarmstrong@gmail.com",
+    "f_name": "Neil",
+    "l_name": "Armstrong",
+    "spaces": [
+      {
+        "area": {
+          "is_indoor": false,
+          "is_outdoor": true,
+          "name": "Frontyard"
+        },
+        "area_id": 1,
+        "name": "Window Garden"
+      },
+      {
+        "area": {
+          "is_indoor": false,
+          "is_outdoor": true,
+          "name": "Backyard"
+        },
+        "area_id": 2,
+        "name": "Vegetable Garden"
+      }
+    ]
+  },
+  {
+    "areas": [],
+    "email": "donaldtrump@gmail.com",
+    "f_name": "Donald",
+    "l_name": "Trump",
+    "spaces": [
+      {
+        "area": {
+          "is_indoor": true,
+          "is_outdoor": false,
+          "name": "House"
+        },
+        "area_id": 3,
+        "name": "Living Room"
+      }
+    ]
+  },
+  {
+    "areas": [],
+    "email": "davidjones@gmail.com",
+    "f_name": "David",
+    "l_name": "Jones",
+    "spaces": []
+  },
+  {
+    "areas": [],
+    "email": "davidjones@gmail.con",
+    "f_name": "David",
+    "l_name": "Jones",
+    "spaces": []
+  },
+  {
+    "areas": [],
+    "email": "anitajones@gmail.con",
+    "f_name": "Anita",
+    "l_name": "Jones",
+    "spaces": []
+  }
+]
+```
 
 ### User Routes
 
