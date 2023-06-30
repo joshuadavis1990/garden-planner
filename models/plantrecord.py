@@ -22,7 +22,7 @@ class PlantRecord(db.Model):
     plants = db.relationship('Plant', back_populates='plantrecord', cascade='all, delete')
 
 class PlantRecordSchema(ma.Schema):
-    user = fields.Nested('UserSchema', exclude=['password'])
+    user = fields.Nested('UserSchema', exclude=['password', 'spaces', 'areas'])
     plants = fields.List(fields.Nested('PlantSchema', only=['date_planted', 'date_fertilised', 'id', 'space_id']))
     name = fields.String(required=True, validate=Length(min=3))
     description = fields.String(load_default='')

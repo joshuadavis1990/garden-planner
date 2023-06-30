@@ -519,7 +519,230 @@ The following is the expected response from the `/spaces/<int:space_id>` endpoin
 
 ### PlantRecord Routes
 
+#### `/plantrecords`
+
+- HTTP Request Verb: GET
+- Description: Allows a logged in user to access a list of all plantrecords, nested with associated areas, spaces and plants.
+- Required Data: None
+- Authentication Methods: `@jwt_required()`, `admin_required`
+
+The following is the expected response from the `/plantrecords` endpoint using sample data:
+
+```
+[
+  {
+    "description": "Camellias are attractive evergreen shrubs with a variety of flower colours.",
+    "fertilisation_rate": "Key feeding times are autumn as buds are developing and in spring once flowering has finished.",
+    "id": 1,
+    "name": "Camellia",
+    "other_comments": "Keep the plant moist but well-drained.",
+    "plants": [
+      {
+        "date_fertilised": null,
+        "date_planted": null,
+        "id": 1,
+        "space_id": 1
+      }
+    ],
+    "preferred_location": "Partial sun",
+    "user": {
+      "areas": [
+        {
+          "is_indoor": false,
+          "is_outdoor": true,
+          "name": "Frontyard"
+        },
+        {
+          "is_indoor": false,
+          "is_outdoor": true,
+          "name": "Backyard"
+        }
+      ],
+      "email": "14209@coderacademy.edu.au",
+      "f_name": "Joshua",
+      "l_name": "Davis",
+      "spaces": [
+        {
+          "area": {
+            "is_indoor": false,
+            "is_outdoor": true,
+            "name": "Frontyard"
+          },
+          "area_id": 1,
+          "name": "Rose Garden"
+        },
+        {
+          "area": {
+            "is_indoor": true,
+            "is_outdoor": false,
+            "name": "House"
+          },
+          "area_id": 3,
+          "name": "Kitchen"
+        }
+      ]
+    },
+    "water_rate": "Average"
+  },
+  {
+    "description": "A large-flowered hybrid plant cultivated as a garden flower.",
+    "fertilisation_rate": "Use a controlled release fertiliser when planting.",
+    "id": 2,
+    "name": "Pansy",
+    "other_comments": "Keep the plant moist but well-drained.",
+    "plants": [
+      {
+        "date_fertilised": null,
+        "date_planted": null,
+        "id": 2,
+        "space_id": 1
+      }
+    ],
+    "preferred_location": "Partial sun",
+    "user": {
+      "areas": [
+        {
+          "is_indoor": false,
+          "is_outdoor": true,
+          "name": "Frontyard"
+        },
+        {
+          "is_indoor": false,
+          "is_outdoor": true,
+          "name": "Backyard"
+        }
+      ],
+      "email": "14209@coderacademy.edu.au",
+      "f_name": "Joshua",
+      "l_name": "Davis",
+      "spaces": [
+        {
+          "area": {
+            "is_indoor": false,
+            "is_outdoor": true,
+            "name": "Frontyard"
+          },
+          "area_id": 1,
+          "name": "Rose Garden"
+        },
+        {
+          "area": {
+            "is_indoor": true,
+            "is_outdoor": false,
+            "name": "House"
+          },
+          "area_id": 3,
+          "name": "Kitchen"
+        }
+      ]
+    },
+    "water_rate": "Average"
+  }
+]
+```
+
+#### `/plantrecords/<int:plantrecord_id>`
+
+- HTTP Request Verb: GET
+- Description: Allows a logged in user to access a single plantrecord by specifying its ID in the URI.
+- Required Data: None
+- Authentication Methods: `@jwt_required()`
+
+The following is the expected response from the `/plantrecords/<int:plantrecord_id>` endpoint using sample data:
+
+```
+{
+  "description": "Camellias are attractive evergreen shrubs with a variety of flower colours.",
+  "fertilisation_rate": "Key feeding times are autumn as buds are developing and in spring once flowering has finished.",
+  "id": 1,
+  "name": "Camellia",
+  "other_comments": "Keep the plant moist but well-drained.",
+  "plants": [
+    {
+      "date_fertilised": null,
+      "date_planted": null,
+      "id": 1,
+      "space_id": 1
+    }
+  ],
+  "preferred_location": "Partial sun",
+  "user": {
+    "areas": [
+      {
+        "is_indoor": false,
+        "is_outdoor": true,
+        "name": "Frontyard"
+      },
+      {
+        "is_indoor": false,
+        "is_outdoor": true,
+        "name": "Backyard"
+      }
+    ],
+    "email": "14209@coderacademy.edu.au",
+    "f_name": "Joshua",
+    "l_name": "Davis",
+    "spaces": [
+      {
+        "area": {
+          "is_indoor": false,
+          "is_outdoor": true,
+          "name": "Frontyard"
+        },
+        "area_id": 1,
+        "name": "Rose Garden"
+      },
+      {
+        "area": {
+          "is_indoor": true,
+          "is_outdoor": false,
+          "name": "House"
+        },
+        "area_id": 3,
+        "name": "Kitchen"
+      }
+    ]
+  },
+  "water_rate": "Average"
+}
+```
+
+#### `/plantrecords`
+
+- HTTP Request Verb: POST
+- Description: Allows a logged in user to create a new plantrecord
+- Required Data: 'name'
+- Authentication Methods: `@jwt_required()`
+
+The following is the expected response from the `/plantrecords` endpoint using sample data:
+
+![CreatePlantRecord](docs/createplantrecord.png)
+
+#### `/plantrecords/<int:plantrecord_id>`
+
+- HTTP Request Verb: PUT, PATCH
+- Description: Allows a logged in user to update an existing plantrecord
+- Required Data: any to-be-updated fields
+- Authentication Methods: `@jwt_required()`, `admin_or_owner_required()`
+
+The following is the expected response from the `/plantrecords/<int:plantrecord_id>` endpoint using sample data:
+
+![UpdatePlantRecord](docs/updateplantrecord.png)
+
+#### `/plantrecords/<int:plantrecord_id>`
+
+- HTTP Request Verb: DELETE
+- Description: Allows a logged in user to delete an existing plantrecord
+- Required Data: None
+- Authentication Methods: `@jwt_required()`, `admin_or_owner_required()`
+
+The following is the expected response from the `/plantrecords/<int:plantrecord_id>` endpoint using sample data:
+
+![DeletePlantRecord](docs/deleteplantrecord.png)
+
 ### Plant Routes
+
+
 
 ## R6 - Entity Relationship Diagram (ERD)
 
