@@ -742,7 +742,104 @@ The following is the expected response from the `/plantrecords/<int:plantrecord_
 
 ### Plant Routes
 
+#### `/plants`
 
+- HTTP Request Verb: GET
+- Description: Allows a logged in user to access a list of all plants with their associated plantrecord
+- Required Data: None
+- Authentication Methods: `@jwt_required()`, `admin_required`
+
+The following is the expected response from the `/plantrecords` endpoint using sample data:
+
+```
+[
+  {
+    "date_fertilised": null,
+    "date_planted": null,
+    "id": 1,
+    "plantrecord": {
+      "fertilisation_rate": "Key feeding times are autumn as buds are developing and in spring once flowering has finished.",
+      "name": "Camellia",
+      "other_comments": "Keep the plant moist but well-drained.",
+      "preferred_location": "Partial sun",
+      "water_rate": "Average"
+    },
+    "plantrecord_id": 1,
+    "space_id": 1,
+    "user": {
+      "email": "14209@coderacademy.edu.au",
+      "f_name": "Joshua",
+      "l_name": "Davis"
+    },
+    "user_id": 1
+  },
+  {
+    "date_fertilised": null,
+    "date_planted": null,
+    "id": 2,
+    "plantrecord": {
+      "fertilisation_rate": "Use a controlled release fertiliser when planting.",
+      "name": "Pansy",
+      "other_comments": "Keep the plant moist but well-drained.",
+      "preferred_location": "Partial sun",
+      "water_rate": "Average"
+    },
+    "plantrecord_id": 2,
+    "space_id": 1,
+    "user": {
+      "email": "14209@coderacademy.edu.au",
+      "f_name": "Joshua",
+      "l_name": "Davis"
+    },
+    "user_id": 1
+  }
+]
+
+```
+
+#### `/plants/<int:plant_id>`
+
+- HTTP Request Verb: GET
+- Description: Allows a logged in user to access a single plant by specifying its ID in the URI.
+- Required Data: None
+- Authentication Methods: `@jwt_required()`
+
+The following is the expected response from the `/plants/<int:plant_id>` endpoint using sample data:
+
+![Plant](docs/plant.png)
+
+#### `/plants`
+
+- HTTP Request Verb: POST
+- Description: Allows a logged in user to create a new plant instance
+- Required Data: 'plantrecord_id', 'space_id'
+- Authentication Methods: `@jwt_required()`
+
+The following is the expected response from the `/plants` endpoint using sample data:
+
+![CreatePlant](docs/createplant.png)
+
+#### `/plants/<int:plant_id>`
+
+- HTTP Request Verb: PUT, PATCH
+- Description: Allows a logged in user to update an existing plant
+- Required Data: any to-be-updated fields
+- Authentication Methods: `@jwt_required()`
+
+The following is the expected response from the `/plants/<int:plant_id>` endpoint using sample data:
+
+![UpdatePlantRecord](docs/updateplantrecord.png)
+
+#### `/plants/<int:plant_id>`
+
+- HTTP Request Verb: DELETE
+- Description: Allows a logged in user to delete an existing plant
+- Required Data: None
+- Authentication Methods: `@jwt_required()`
+
+The following is the expected response from the `/plants/<int:plant_id>` endpoint using sample data:
+
+![DeletePlant](docs/deleteplant.png)
 
 ## R6 - Entity Relationship Diagram (ERD)
 

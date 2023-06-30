@@ -18,8 +18,8 @@ class Plant(db.Model):
 class PlantSchema(ma.Schema):
     user = fields.Nested('UserSchema', exclude=['password', 'spaces', 'areas'])
     plantrecord = fields.Nested('PlantRecordSchema', only=['name', 'preferred_location', 'water_rate', 'fertilisation_rate', 'other_comments'])
-    date_planted = fields.Date(load_default='')
-    date_fertilised = fields.Date(load_default='')
+    date_planted = fields.Date(load_default=None)
+    date_fertilised = fields.Date(load_default=None)
 
     class Meta:
         fields = ('id', 'date_planted', 'date_fertilised', 'space_id', 'plantrecord_id', 'user', 'plantrecord', 'user_id')
