@@ -32,7 +32,7 @@ According to IBM, database management systems (DBMS) are categorised according t
 - inverted list,
 - hierarchic,
 - network, and
-- relational (/What is a database management system?/).
+- relational (*What is a database management system?*).
 
 Using a DBMS for the Garden Planner API has allowed for a full suite of data manipulation tools (DML) as well as tools for management of the database structure itself (DDL). There are many distinct advantages to DBMS, in general, including:
 
@@ -44,9 +44,9 @@ Using a DBMS for the Garden Planner API has allowed for a full suite of data man
 
 However, DBMS do differ and each system has advantages and disadvantages. A hierarchical model, for example, would be well suited to data that stays relatively static. However, this Garden Planner API requires a dynamism in its data structures as well as its data.
 
-Given this, and after careful consideration, it was decided that a relational database management system was the most advantageous choice for the Garden Planner API. The primary reason for this decision was that this form of DBMS provides the ability to join tables together, therefore showing a relationship between data or how tables connect (/Benefits of relational databases/). The API needs to solve an organisational problem for its users as identified in R1 and R2 above. Given this, an organised solution to data storage, as exemplified through relational DBMS, allows the user to see the relationships between entities. For example, the user can log details of plant species in their garden (`PlantRecords`), and as the garden develops, they can add instances of this `plantrecord` in another entity (`Plants`). These `plants` can belong to multiple `spaces` and these `spaces` can be contained within `areas`. In a DBMS like PostgreSQL, entities/tables can be easily through Structured Query Language (SQL) and populated with data through queries.
+Given this, and after careful consideration, it was decided that a relational database management system was the most advantageous choice for the Garden Planner API. The primary reason for this decision was that this form of DBMS provides the ability to join tables together, therefore showing a relationship between data or how tables connect (*Benefits of relational databases*). The API needs to solve an organisational problem for its users as identified in R1 and R2 above. Given this, an organised solution to data storage, as exemplified through relational DBMS, allows the user to see the relationships between entities. For example, the user can log details of plant species in their garden (`PlantRecords`), and as the garden develops, they can add instances of this `plantrecord` in another entity (`Plants`). These `plants` can belong to multiple `spaces` and these `spaces` can be contained within `areas`. In a DBMS like PostgreSQL, entities/tables can be easily through Structured Query Language (SQL) and populated with data through queries.
 
-Using a relational DBMS also assists the user in eliminating redundancies. This is primarily achieved through a process known as data normalisation. Normalisation is the process of creating tables and table relationships that make the database flexible or alterable, eliminating redundancies and inconsistent dependencies (/Description of the database normalization basics/). To illustrate, if the Garden Planner database stored data regarding plants in multiple tables in the database, maintaining this information would be tedious and error prone. This data should only be located in one table and this process of normalising data is achieved through a three-step process of 1NF, 2NF and 3NF.
+Using a relational DBMS also assists the user in eliminating redundancies. This is primarily achieved through a process known as data normalisation. Normalisation is the process of creating tables and table relationships that make the database flexible or alterable, eliminating redundancies and inconsistent dependencies (*Description of the database normalization basics*). To illustrate, if the Garden Planner database stored data regarding plants in multiple tables in the database, maintaining this information would be tedious and error prone. This data should only be located in one table and this process of normalising data is achieved through a three-step process of 1NF, 2NF and 3NF.
 
 In a relational DBMS, data structure is predefined and table-based. This might be a disadvantage compared to the greater freedoms provided in non-relational databases to represent data in key-value pairs, documents, column-families or graphs, however, tables are an apt solution for the data collected in this instance.
 
@@ -54,17 +54,17 @@ Relational DBMS may be slower in performance in some use cases; however, big dat
 
 ### PostgreSQL
 
-PostgreSQL was chosen for the Garden Planner API because it is a ubiquitous relational DBMS used with Flask applications that is open-source. This makes it a free application that brings with it the freedom to use, modify and implement it to suit business needs (/What is PostgreSQL?/). Additionally, PostgreSQL supports a range of features, including support for:
+PostgreSQL was chosen for the Garden Planner API because it is a ubiquitous relational DBMS used with Flask applications that is open-source. This makes it a free application that brings with it the freedom to use, modify and implement it to suit business needs (*What is PostgreSQL?*). Additionally, PostgreSQL supports a range of features, including support for:
 
 - writing database functions in a range of languages, including Python, JavaScript and Shell;
-- a large number of data types from basic types such as numeric and string, geometric types, JSON, monetary types, dates and arrays. PostgreSQL also allows the user to define their own complex data types (/The benefits of PostgreSQL/);
+- a large number of data types from basic types such as numeric and string, geometric types, JSON, monetary types, dates and arrays. PostgreSQL also allows the user to define their own complex data types (*The benefits of PostgreSQL*);
 - full-text search;
-- a variety of business sizes and needs as a result of its robust authentication, access control and privilege management systems (/The benefits of PostgreSQL/);
+- a variety of business sizes and needs as a result of its robust authentication, access control and privilege management systems (*The benefits of PostgreSQL*);
 - views, for information that is often queried;
 - attaching comments; and
 - write-ahead logging so the data can be recovered after a software crash.
 
-Like most other relational DBMS, PostgreSQL allows the user to store data in tables and query, modify and retrieve that data using relational algebra techniques through structured query language (SQL); however, PostgreSQL is technically an Object-Relational DBMS, meaning it has some additional functionality (/The benefits of PostgreSQL/). This includes defining complex data types, inheritance and overloading functions (/The benefits of PostgreSQL/).
+Like most other relational DBMS, PostgreSQL allows the user to store data in tables and query, modify and retrieve that data using relational algebra techniques through structured query language (SQL); however, PostgreSQL is technically an Object-Relational DBMS, meaning it has some additional functionality (*The benefits of PostgreSQL*). This includes defining complex data types, inheritance and overloading functions (*The benefits of PostgreSQL*).
 
 PostgreSQL has a large and active community of users and is well-supported with documentation and help guides.
 
@@ -72,12 +72,12 @@ Despite the numerous advantages listed above, PostgreSQL is comparatively slower
 
 ## R4 - Functionality and Benefits of an Object Relational Mapper (ORM)
 
-An Object Relational Mapper (ORM) acts as a bridge between object-oriented programs and relational databases. In practice and directly related to this API, this means that an ORM will convert Python objects to the relational schema of the database. Direct SQL queries for the CRUD operations are therefore not needed when using an ORM as it acts as an additional layer between a programming language and a database. Principally, this means that it standardises the coding process, reducing boilerplate and speeding development time (/Understanding Object-Relational Mapping/). This API, in particular, has used the SQLAlchemy ORM which provides SQL functionality, and efficient and high-performing database access, adapted into a simple and Pythonic domain language (/The Python SQL Toolkit and Object Relational Mapper/).
+An Object Relational Mapper (ORM) acts as a bridge between object-oriented programs and relational databases. In practice and directly related to this API, this means that an ORM will convert Python objects to the relational schema of the database. Direct SQL queries for the CRUD operations are therefore not needed when using an ORM as it acts as an additional layer between a programming language and a database. Principally, this means that it standardises the coding process, reducing boilerplate and speeding development time (*Understanding Object-Relational Mapping*). This API, in particular, has used the SQLAlchemy ORM which provides SQL functionality, and efficient and high-performing database access, adapted into a simple and Pythonic domain language (*The Python SQL Toolkit and Object Relational Mapper*).
 
 SQLAlchemy provides extensive help documentation for understanding its comprehensive functionality. It has allowed the following functionality with this API:
 
-- Declarative mapping of models which simultaneously define a Python object model as well as database metadata that describes real SQL tables that exist, or will exist, in a database (/SQLAlchemy 2.0 Documentation/). In this API, a model has been created for each entity in the database.
-- Creating instances of classes, using the `session.add_all()` method to add multiple objects at once, and then using the `session.commit() method to flush any pending changes and commit the current database transaction (/SQLAlchemy 2.0 Documentation/).
+- Declarative mapping of models which simultaneously define a Python object model as well as database metadata that describes real SQL tables that exist, or will exist, in a database (*SQLAlchemy 2.0 Documentation*). In this API, a model has been created for each entity in the database.
+- Creating instances of classes, using the `session.add_all()` method to add multiple objects at once, and then using the `session.commit() method to flush any pending changes and commit the current database transaction (*SQLAlchemy 2.0 Documentation*).
 - Using the `select()` function to create a new `Select` object, then invoked using a `Session`.
 - Using the `Session.scalars()` method to return a `ScalarResult` to iterate through the ORM objects selected.
 - Querying against multiple tables at once using the join keyword in the `Select.join()` method.
@@ -847,7 +847,79 @@ The following is the expected response from the `/plants/<int:plant_id>` endpoin
 
 ## R7 - Third Party Services
 
+The following third party services were used in the development of the Garden Planner API: Talk about Flask in this general paragraph
+
+### SQLAlchemy==2.0.16
+
+
+
+### psycopg2-binary==2.9.6
+
+
+
+### Flask-Marshmallow
+
+
+
+### python-dotenv==1.0.0
+
+
+
+### Flask-Bcrypt==1.0.1
+
+
+
+### Flask-JWT-Extended==4.5.2
+
+
+
+### flask-marshmallow==0.15.0
+
+
+
+### Flask-SQLAlchemy==3.0.4
+
+
+
+### marshmallow==3.19.0
+
+
+
+### marshmallow-sqlalchemy==0.29.0
+
+
+
 ## R8 - Model Description
+
+The Garden Planner API was built using a relational database model that was able to show the associations between the application's main models/entities. In summary, these models are:
+
+1. `users`
+2. `areas`
+3. `spaces`
+4. `plantrecords`
+5. `plants`
+
+As shown in the ERD in R6 above, these models are related to one another through foreign keys. Each model also has its own attributes and data types, and importantly, each model has an `id` primary key that is able to uniquely identity that table.
+
+![UsersModel](docs/usersmodel.png)
+
+The `users` model stores data about active users of the application, including their basic credentials for login and authentication purposes. The API requires users to enter a `f_name`, `l_name`, `email` and `password`. There is also an optional attribute, `is_admin`, a Boolean that will default to `False` if not provided. If `is_admin`, the user will have greater privileges in the application. In the development of the application, it was decided that a `users` model was important as it would allow for a unique user to input their own data related to their gardens. It proved to be an essential entity in the relational model as every table has `user_id` as a foreign key. This was particularly helpful in establishing nested fields usings `fields.Nested` in the Marshmallow schemas of each model. The server response could then show additional relational information in the JSON when accessing particular endpoints.
+
+![AreasModel](docs/areasmodel.png)
+
+The `areas` model was developed to enable a user to
+
+![SpacesModel](docs/spacesmodel.png)
+
+The `spaces` model was
+
+![PlantRecordsModel](docs/plantrecordsmodel.png)
+
+The `plantrecords` model was
+
+![PlantsModel](docs/plantsmodel.png)
+
+The `plants` model was
 
 ## R9 - Database Relations
 
@@ -855,20 +927,20 @@ The following is the expected response from the `/plants/<int:plant_id>` endpoin
 
 ## Works Cited
 
-/Advantages of Database Management System (DBMS)/, Java T Point, https://www.javatpoint.com/advantages-of-dbms. Accessed 28 June 2023.
+*Advantages of Database Management System (DBMS)*, Java T Point, https://www.javatpoint.com/advantages-of-dbms. Accessed 28 June 2023.
 
-/Benefits of relational databases/, IBM, https://www.ibm.com/topics/relational-databases#:~:text=The%20primary%20benefit%20of%20the,group%2C%20and%20also%20combine%20queries. Accessed 28 June 2023.
+*Benefits of relational databases*, IBM, https://www.ibm.com/topics/relational-databases#:~:text=The%20primary%20benefit%20of%20the,group%2C%20and%20also%20combine%20queries. Accessed 28 June 2023.
 
-/Description of the database normalization basics/, Microsoft, https://learn.microsoft.com/en-us/office/troubleshoot/access/database-normalization-description. Accessed 28 June 2023.
+*Description of the database normalization basics*, Microsoft, https://learn.microsoft.com/en-us/office/troubleshoot/access/database-normalization-description. Accessed 28 June 2023.
 
-/SQLAlchemy 2.0 Documentation/, SQLAlchemy, https://docs.sqlalchemy.org/en/20/orm/quickstart.html. Accessed 28 June 2023.
+*SQLAlchemy 2.0 Documentation*, SQLAlchemy, https://docs.sqlalchemy.org/en/20/orm/quickstart.html. Accessed 28 June 2023.
 
-/The benefits of PostgreSQL/, Prisma's Data Guide, https://www.prisma.io/dataguide/postgresql/benefits-of-postgresql. Accessed 28 June 2023.
+*The benefits of PostgreSQL*, Prisma's Data Guide, https://www.prisma.io/dataguide/postgresql/benefits-of-postgresql. Accessed 28 June 2023.
 
-/The Python SQL Toolkit and Object Relational Mapper/, SQLAlchemy, https://www.sqlalchemy.org. Accessed 28 June 2023.
+*The Python SQL Toolkit and Object Relational Mapper*, SQLAlchemy, https://www.sqlalchemy.org. Accessed 28 June 2023.
 
-/Understanding Object-Relational Mapping/, altexsoft, https://www.altexsoft.com/blog/object-relational-mapping/. Accessed 28 June 2023.
+*Understanding Object-Relational Mapping*, altexsoft, https://www.altexsoft.com/blog/object-relational-mapping/. Accessed 28 June 2023.
 
-/What is a database management system?/ IBM, https://www.ibm.com/docs/en/zos-basic-skills?topic=zos-what-is-database-management-system. Accessed 28 June 2023.
+*What is a database management system?* IBM, https://www.ibm.com/docs/en/zos-basic-skills?topic=zos-what-is-database-management-system. Accessed 28 June 2023.
 
-/What is PostgreSQL?/ LinkedIn, https://www.linkedin.com/pulse/what-postgresql-introduction-advantages-disadvantages-ankita-sharda. Accessed 28 June 2023.
+*What is PostgreSQL?* LinkedIn, https://www.linkedin.com/pulse/what-postgresql-introduction-advantages-disadvantages-ankita-sharda. Accessed 28 June 2023.
