@@ -96,7 +96,7 @@ SQLAlchemy provides extensive help documentation for understanding its comprehen
 
 The following is the expected response from the `auth/register` endpoint using sample data:
 
-![ERD](docs/register.png)
+![Register](docs/register.png)
 
 #### `/auth/login`
 
@@ -107,7 +107,7 @@ The following is the expected response from the `auth/register` endpoint using s
 
 The following is the expected response from the `auth/login` endpoint using sample data:
 
-![ERD](docs/login.png)
+![Login](docs/login.png)
 
 #### `/auth/users`
 
@@ -217,7 +217,7 @@ The following is the expected response from the `/users/<int:user_id>` endpoint 
 
 The following is the expected response from the `/users/<int:user_id>` endpoint using sample data: `{}` and error code `200`.
 
-![ERD](docs/deleteuser.png)
+![DeleteUser](docs/deleteuser.png)
 
 ### Area Routes
 
@@ -225,7 +225,7 @@ The following is the expected response from the `/users/<int:user_id>` endpoint 
 
 - HTTP Request Verb: GET
 - Description: Allows a logged in user to access a list of all areas, nested with associated users and spaces.
-- Required Data: 'email', 'password'
+- Required Data: None
 - Authentication Methods: `@jwt_required()`
 
 The following is the expected response from the `/areas` endpoint using sample data:
@@ -293,7 +293,7 @@ The following is the expected response from the `/areas` endpoint using sample d
 
 - HTTP Request Verb: GET
 - Description: Allows a logged in user to access a list of all outdoor areas, nested with associated users and spaces.
-- Required Data: 'email', 'password'
+- Required Data: None
 - Authentication Methods: `@jwt_required()`
 
 The following is the expected response from the `/areas/outdoors` endpoint using sample data:
@@ -342,12 +342,12 @@ The following is the expected response from the `/areas/outdoors` endpoint using
 
 - HTTP Request Verb: GET
 - Description: Allows a logged in user to access a single area by specifying its ID in the URI.
-- Required Data: 'email', 'password'
+- Required Data: None
 - Authentication Methods: `@jwt_required()`
 
 The following is the expected response from the `/areas/<int:area_id` endpoint using sample data:
 
-![ERD](docs/area.png)
+![GetArea](docs/area.png)
 
 #### `/areas`
 
@@ -358,31 +358,164 @@ The following is the expected response from the `/areas/<int:area_id` endpoint u
 
 The following is the expected response from the `/areas` endpoint using sample data:
 
-![ERD](docs/createarea.png)
+![CreateArea](docs/createarea.png)
 
 #### `/areas/<int:area_id>`
 
 - HTTP Request Verb: PUT, PATCH
 - Description: Allows a logged in user to update an existing area
-- Required Data: 'name', 'is_outdoor', 'is_indoor' can be updated
+- Required Data: any to-be-updated fields
 - Authentication Methods: `@jwt_required()`, `@admin_or_owner_required()`
 
 The following is the expected response from the `/areas/<int:area_id` endpoint using sample data:
 
-![ERD](docs/updatearea.png)
+![UpdateArea](docs/updatearea.png)
 
 #### `/areas/<int:area_id>`
 
 - HTTP Request Verb: DELETE
 - Description: Allows a logged in user to delete an existing area
-- Required Data: 
+- Required Data: None
 - Authentication Methods: `@jwt_required()`, `@admin_or_owner_required()`
 
 The following is the expected response from the `/areas/<int:area_id` endpoint using sample data:
 
-![ERD](docs/deletearea.png)
+![DeleteArea](docs/deletearea.png)
 
 ### Space Routes
+
+#### `/spaces`
+
+- HTTP Request Verb: GET
+- Description: Allows a logged in user to access a list of all spaces, nested with associated areas.
+- Required Data: None
+- Authentication Methods: `@jwt_required()`
+
+The following is the expected response from the `/spaces` endpoint using sample data:
+
+```
+[
+  {
+    "area": {
+      "is_indoor": true,
+      "is_outdoor": false,
+      "name": "House"
+    },
+    "area_id": 3,
+    "id": 4,
+    "name": "Kitchen",
+    "user": {
+      "email": "14209@coderacademy.edu.au",
+      "f_name": "Joshua",
+      "l_name": "Davis"
+    }
+  },
+  {
+    "area": {
+      "is_indoor": true,
+      "is_outdoor": false,
+      "name": "House"
+    },
+    "area_id": 3,
+    "id": 3,
+    "name": "Living Room",
+    "user": {
+      "email": "donaldtrump@gmail.com",
+      "f_name": "Donald",
+      "l_name": "Trump"
+    }
+  },
+  {
+    "area": {
+      "is_indoor": false,
+      "is_outdoor": true,
+      "name": "Frontyard"
+    },
+    "area_id": 1,
+    "id": 1,
+    "name": "Rose Garden",
+    "user": {
+      "email": "14209@coderacademy.edu.au",
+      "f_name": "Joshua",
+      "l_name": "Davis"
+    }
+  },
+  {
+    "area": {
+      "is_indoor": false,
+      "is_outdoor": true,
+      "name": "Backyard"
+    },
+    "area_id": 2,
+    "id": 5,
+    "name": "Vegetable Garden",
+    "user": {
+      "email": "neilarmstrong@gmail.com",
+      "f_name": "Neil",
+      "l_name": "Armstrong"
+    }
+  },
+  {
+    "area": {
+      "is_indoor": false,
+      "is_outdoor": true,
+      "name": "Frontyard"
+    },
+    "area_id": 1,
+    "id": 2,
+    "name": "Window Garden",
+    "user": {
+      "email": "neilarmstrong@gmail.com",
+      "f_name": "Neil",
+      "l_name": "Armstrong"
+    }
+  }
+]
+```
+
+#### `/spaces/<int:space_id>`
+
+- HTTP Request Verb: GET
+- Description: Allows a logged in user to access a single space by specifying its ID in the URI.
+- Required Data: None
+- Authentication Methods: `@jwt_required()`
+
+The following is the expected response from the `/spaces/<int:space_id>` endpoint using sample data:
+
+![GetSpace](docs/space.png)
+
+#### `/spaces`
+
+- HTTP Request Verb: POST
+- Description: Allows a logged in user to create a new space
+- Required Data: 'name', 'area_id'
+- Authentication Methods: `@jwt_required()`
+
+The following is the expected response from the `/spaces` endpoint using sample data:
+
+![CreateSpace](docs/createspace.png)
+
+#### `/spaces/<int:space_id>`
+
+- HTTP Request Verb: PUT, PATCH
+- Description: Allows a logged in user to update an existing space
+- Required Data: any to-be-updated fields
+- Authentication Methods: `@jwt_required()`, `admin_or_owner_required()`
+
+The following is the expected response from the `/spaces/<int:space_id>` endpoint using sample data:
+
+![UpdateSpace](docs/updatespace.png)
+
+#### `/spaces/<int:space_id>`
+
+- HTTP Request Verb: DELETE
+- Description: Allows a logged in user to delete an existing space
+- Required Data: None
+- Authentication Methods: `@jwt_required()`, `admin_or_owner_required()`
+
+The following is the expected response from the `/spaces/<int:space_id>` endpoint using sample data:
+
+![DeleteSpace](docs/deletespace.png)
 
 ### PlantRecord Routes
 
