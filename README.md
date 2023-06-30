@@ -87,14 +87,25 @@ SQLAlchemy provides extensive help documentation for understanding its comprehen
 
 ### Auth Routes
 
-#### `/register`
+#### `auth/register`
 
 - HTTP Request Verb: POST
 - Description: Allows a new user to register 
 - Required Data: 
 - Authentication Methods: None
 
-The following is the expected response from the `/register` endpoint using sample data:
+The following is the expected response from the `auth/register` endpoint using sample data:
+
+#### `auth/login`
+
+- HTTP Request Verb: POST
+- Description: Allows a new user to login with their registered credentials
+- Required Data: 'email', 'password'
+- Authentication Methods: None
+
+The following is the expected response from the `auth/login` endpoint using sample data:
+
+![ERD](docs/login.png)
 
 ### User Routes
 
