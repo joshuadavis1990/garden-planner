@@ -205,27 +205,6 @@ The following is the expected response from the `auth/users` endpoint using samp
         "name": "Living Room"
       }
     ]
-  },
-  {
-    "areas": [],
-    "email": "davidjones@gmail.com",
-    "f_name": "David",
-    "l_name": "Jones",
-    "spaces": []
-  },
-  {
-    "areas": [],
-    "email": "davidjones@gmail.con",
-    "f_name": "David",
-    "l_name": "Jones",
-    "spaces": []
-  },
-  {
-    "areas": [],
-    "email": "anitajones@gmail.con",
-    "f_name": "Anita",
-    "l_name": "Jones",
-    "spaces": []
   }
 ]
 ```
