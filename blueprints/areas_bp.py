@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from models.area import Area, AreaSchema
 from init import db
 from flask_jwt_extended import jwt_required
-from blueprints.auth_bp import admin_required
+from blueprints.auth_bp import admin_required, admin_or_owner_required
 
 areas_bp = Blueprint('areas', __name__, url_prefix='/areas')
 
@@ -20,14 +20,6 @@ def all_areas():
 @jwt_required()
 def all_outdoor_areas():
     stmt = db.select(Area).where(Area.is_outdoor)
-    areas = db.session.scalars(stmt).all()
-    return AreaSchema(many=True).dump(areas)
-
-# Get all indoor areas
-@areas_bp.route('/indoors')
-@jwt_required
-def all_indoor_areas():
-    stmt = db.select(Area).where(Area.is_indoor)
     areas = db.session.scalars(stmt).all()
     return AreaSchema(many=True).dump(areas)
 
@@ -65,11 +57,11 @@ def create_area():
 @areas_bp.route('/<int:area_id>', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_area(area_id):
-    admin_required()
     stmt = db.select(Area).filter_by(id=area_id)
     area = db.session.scalar(stmt)
     area_info = AreaSchema().load(request.json)
     if area:
+        admin_or_owner_required(area.user.id)
         area.name = area_info.get('name', area.name)
         area.is_outdoor = area_info.get('is_outdoor', area.is_outdoor)
         area.is_indoor = area_info.get('is_indoor', area.is_indoor)
@@ -82,10 +74,10 @@ def update_area(area_id):
 @areas_bp.route('/<int:area_id>', methods=['DELETE'])
 @jwt_required()
 def delete_area(area_id):
-    admin_required()
     stmt = db.select(Area).filter_by(id=area_id)
     area = db.session.scalar(stmt)
     if area:
+        admin_or_owner_required(area.user.id)
         db.session.delete(area)
         db.session.commit()
         return {}, 200

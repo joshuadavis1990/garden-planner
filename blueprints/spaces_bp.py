@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from models.space import Space, SpaceSchema
 from init import db
 from flask_jwt_extended import jwt_required
-from blueprints.auth_bp import admin_required
+from blueprints.auth_bp import admin_required, admin_or_owner_required
 
 spaces_bp = Blueprint('spaces', __name__, url_prefix='/spaces')
 
@@ -48,11 +48,11 @@ def create_space():
 @spaces_bp.route('/<int:space_id>', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_space(space_id):
-    admin_required()
     stmt = db.select(Space).filter_by(id=space_id)
     space = db.session.scalar(stmt)
     space_info = SpaceSchema().load(request.json)
     if space:
+        admin_or_owner_required(space.user.id)
         space.name = space_info.get('name', space.name)
         db.session.commit()
         return SpaceSchema().dump(space)
@@ -63,10 +63,10 @@ def update_space(space_id):
 @spaces_bp.route('/<int:space_id>', methods=['DELETE'])
 @jwt_required()
 def delete_space(space_id):
-    admin_required()
     stmt = db.select(Space).filter_by(id=space_id)
     space = db.session.scalar(stmt)
     if space:
+        admin_or_owner_required(space.user.id)
         db.session.delete(space)
         db.session.commit()
         return {}, 200

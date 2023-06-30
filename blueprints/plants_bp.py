@@ -3,7 +3,7 @@ from models.plant import Plant, PlantSchema
 from init import db
 from datetime import date
 from flask_jwt_extended import jwt_required
-from blueprints.auth_bp import admin_required
+from blueprints.auth_bp import admin_required, admin_or_owner_required
 
 plants_bp = Blueprint('plants', __name__, url_prefix='/plants')
 
@@ -49,11 +49,11 @@ def create_plant():
 @plants_bp.route('/<int:plant_id>', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_plant(plant_id):
-    admin_required()
     stmt = db.select(Plant).filter_by(id=plant_id)
     plant = db.session.scalar(stmt)
     plant_info = PlantSchema().load(request.json)
     if plant:
+        admin_or_owner_required(plant.user.id)
         plant.date_planted = plant_info.get('date_planted', plant.date_planted)
         plant.date_fertilised = plant_info.get('date_fertilised', plant.date_fertilised)
         db.session.commit()
@@ -65,10 +65,10 @@ def update_plant(plant_id):
 @plants_bp.route('/<int:plant_id>', methods=['DELETE'])
 @jwt_required()
 def delete_plant(plant_id):
-    admin_required()
     stmt = db.select(Plant).filter_by(id=plant_id)
     plant = db.session.scalar(stmt)
     if plant:
+        admin_or_owner_required(plant.user.id)
         db.session.delete(plant)
         db.session.commit()
         return {}, 200

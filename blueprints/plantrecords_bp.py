@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from models.plantrecord import PlantRecord, PlantRecordSchema
 from init import db
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from blueprints.auth_bp import admin_required
+from blueprints.auth_bp import admin_required, admin_or_owner_required
 
 plantrecords_bp = Blueprint('plantrecords', __name__, url_prefix='/plantrecords')
 
@@ -58,6 +58,7 @@ def update_plantrecord(plantrecord_id):
     plant_record = db.session.scalar(stmt)
     plantrecord_info = PlantRecordSchema().load(request.json)
     if plant_record:
+        admin_or_owner_required(plant_record.user.id)
         plant_record.name = plantrecord_info.get('name', plant_record.name)
         plant_record.description = plantrecord_info.get('description', plant_record.description)
         plant_record.preferred_location = plantrecord_info.get('preferred_location', plant_record.preferred_location)
@@ -73,10 +74,10 @@ def update_plantrecord(plantrecord_id):
 @plantrecords_bp.route('/<int:plantrecord_id>', methods=['DELETE'])
 @jwt_required()
 def delete_plantrecord(plantrecord_id):
-    admin_required()
     stmt = db.select(PlantRecord).filter_by(id=plantrecord_id)
     plant_record = db.session.scalar(stmt)
     if plant_record:
+        admin_or_owner_required(plant_record.user.id)
         db.session.delete(plant_record)
         db.session.commit()
         return {}, 200
