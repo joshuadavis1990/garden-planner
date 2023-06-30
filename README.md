@@ -87,7 +87,7 @@ SQLAlchemy provides extensive help documentation for understanding its comprehen
 
 ### Auth Routes
 
-#### `auth/register`
+#### `/auth/register`
 
 - HTTP Request Verb: POST
 - Description: Allows a new user to register their first name, last name, email and password and create an account with the Garden Planner application. This data is added to the `users` database entity.
@@ -98,7 +98,7 @@ The following is the expected response from the `auth/register` endpoint using s
 
 ![ERD](docs/register.png)
 
-#### `auth/login`
+#### `/auth/login`
 
 - HTTP Request Verb: POST
 - Description: Allows a new user to login with their registered credentials. The response is a JWT token and user summary, excluding password.
@@ -109,7 +109,7 @@ The following is the expected response from the `auth/login` endpoint using samp
 
 ![ERD](docs/login.png)
 
-#### `auth/users`
+#### `/auth/users`
 
 - HTTP Request Verb: GET
 - Description: Allows a user with admin credentials to obtain a JSON list of all registered users. The server response includes nested data regarding areas owned by those users.
@@ -158,10 +158,10 @@ The following is the expected response from the `auth/users` endpoint using samp
 ]
 ```
 
-#### `auth/users/<int:user_id>`
+#### `/auth/users/<int:user_id>`
 
 - HTTP Request Verb: GET
-- Description: Allows a user with admin credentials to obtain a single record for the specified user in the URI using their user ID. The server response includes nested data regarding areas owned by that user.
+- Description: Allows a user with admin credentials to obtain a single record for the specified user in the URI using their user ID. The server response includes nested data regarding areas and spaces owned by that user.
 - Required Data: 'email', 'password'
 - Authentication Methods: `@jwt_required()`, `admin_required()`
 
@@ -208,7 +208,7 @@ The following is the expected response from the `/users/<int:user_id>` endpoint 
 
 ```
 
-#### `auth/users/<int:user_id>`
+#### `/auth/users/<int:user_id>`
 
 - HTTP Request Verb: DELETE
 - Description: Allows a user with admin credentials to delete a user from the database.
@@ -217,11 +217,170 @@ The following is the expected response from the `/users/<int:user_id>` endpoint 
 
 The following is the expected response from the `/users/<int:user_id>` endpoint using sample data: `{}` and error code `200`.
 
-
-
-### User Routes
+![ERD](docs/deleteuser.png)
 
 ### Area Routes
+
+#### `/areas`
+
+- HTTP Request Verb: GET
+- Description: Allows a logged in user to access a list of all areas, nested with associated users and spaces.
+- Required Data: 'email', 'password'
+- Authentication Methods: `@jwt_required()`
+
+The following is the expected response from the `/areas` endpoint using sample data:
+
+```
+[
+  {
+    "id": 2,
+    "is_indoor": false,
+    "is_outdoor": true,
+    "name": "Backyard",
+    "spaces": [
+      {
+        "name": "Vegetable Garden"
+      }
+    ],
+    "user": {
+      "email": "14209@coderacademy.edu.au",
+      "f_name": "Joshua",
+      "l_name": "Davis"
+    }
+  },
+  {
+    "id": 1,
+    "is_indoor": false,
+    "is_outdoor": true,
+    "name": "Frontyard",
+    "spaces": [
+      {
+        "name": "Rose Garden"
+      },
+      {
+        "name": "Window Garden"
+      }
+    ],
+    "user": {
+      "email": "14209@coderacademy.edu.au",
+      "f_name": "Joshua",
+      "l_name": "Davis"
+    }
+  },
+  {
+    "id": 3,
+    "is_indoor": true,
+    "is_outdoor": false,
+    "name": "House",
+    "spaces": [
+      {
+        "name": "Living Room"
+      },
+      {
+        "name": "Kitchen"
+      }
+    ],
+    "user": {
+      "email": "neilarmstrong@gmail.com",
+      "f_name": "Neil",
+      "l_name": "Armstrong"
+    }
+  }
+]
+```
+
+#### `/areas/outdoors`
+
+- HTTP Request Verb: GET
+- Description: Allows a logged in user to access a list of all outdoor areas, nested with associated users and spaces.
+- Required Data: 'email', 'password'
+- Authentication Methods: `@jwt_required()`
+
+The following is the expected response from the `/areas/outdoors` endpoint using sample data:
+
+```
+[
+  {
+    "id": 1,
+    "is_indoor": false,
+    "is_outdoor": true,
+    "name": "Frontyard",
+    "spaces": [
+      {
+        "name": "Rose Garden"
+      },
+      {
+        "name": "Window Garden"
+      }
+    ],
+    "user": {
+      "email": "14209@coderacademy.edu.au",
+      "f_name": "Joshua",
+      "l_name": "Davis"
+    }
+  },
+  {
+    "id": 2,
+    "is_indoor": false,
+    "is_outdoor": true,
+    "name": "Backyard",
+    "spaces": [
+      {
+        "name": "Vegetable Garden"
+      }
+    ],
+    "user": {
+      "email": "14209@coderacademy.edu.au",
+      "f_name": "Joshua",
+      "l_name": "Davis"
+    }
+  }
+]
+```
+
+#### `/areas/<int:area_id>`
+
+- HTTP Request Verb: GET
+- Description: Allows a logged in user to access a single area by specifying its ID in the URI.
+- Required Data: 'email', 'password'
+- Authentication Methods: `@jwt_required()`
+
+The following is the expected response from the `/areas/<int:area_id` endpoint using sample data:
+
+![ERD](docs/area.png)
+
+#### `/areas`
+
+- HTTP Request Verb: POST
+- Description: Allows a logged in user to create a new area
+- Required Data: 'name', 'is_outdoor', 'is_indoor'
+- Authentication Methods: `@jwt_required()`
+
+The following is the expected response from the `/areas` endpoint using sample data:
+
+![ERD](docs/createarea.png)
+
+#### `/areas/<int:area_id>`
+
+- HTTP Request Verb: PUT, PATCH
+- Description: Allows a logged in user to update an existing area
+- Required Data: 'name', 'is_outdoor', 'is_indoor' can be updated
+- Authentication Methods: `@jwt_required()`, `@admin_or_owner_required()`
+
+The following is the expected response from the `/areas/<int:area_id` endpoint using sample data:
+
+![ERD](docs/updatearea.png)
+
+#### `/areas/<int:area_id>`
+
+- HTTP Request Verb: DELETE
+- Description: Allows a logged in user to delete an existing area
+- Required Data: 
+- Authentication Methods: `@jwt_required()`, `@admin_or_owner_required()`
+
+The following is the expected response from the `/areas/<int:area_id` endpoint using sample data:
+
+![ERD](docs/deletearea.png)
 
 ### Space Routes
 
