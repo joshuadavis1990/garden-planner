@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from models.space import Space, SpaceSchema
 from init import db
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from blueprints.auth_bp import admin_required, admin_or_owner_required
 
 spaces_bp = Blueprint('spaces', __name__, url_prefix='/spaces')
@@ -36,7 +36,7 @@ def create_space():
     space = Space(
         name = space_info['name'],
         area_id = space_info['area_id'],
-        user_id = space_info['user_id']
+        user_id = get_jwt_identity()
     )
     # Add and commit the new space to the session
     db.session.add(space)

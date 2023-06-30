@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from models.plant import Plant, PlantSchema
 from init import db
 from datetime import date
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from blueprints.auth_bp import admin_required, admin_or_owner_required
 
 plants_bp = Blueprint('plants', __name__, url_prefix='/plants')
@@ -37,7 +37,7 @@ def create_plant():
         date_fertilised = plant_info['date_fertilised'],
         space_id = plant_info['space_id'],
         plantrecord_id = plant_info['plantrecord_id'],
-        user_id = plant_info['user_id']
+        user_id = get_jwt_identity()
     )
     # Add and commit the new plant to the session
     db.session.add(plant)

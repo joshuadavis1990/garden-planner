@@ -1,5 +1,6 @@
 from init import db, ma
 from marshmallow import fields
+from marshmallow.validate import Length
 
 class Space(db.Model):
     __tablename__ = 'spaces'
@@ -17,6 +18,7 @@ class Space(db.Model):
 class SpaceSchema(ma.Schema):
     user = fields.Nested('UserSchema', exclude=['password', 'areas', 'spaces'])
     area = fields.Nested('AreaSchema', only=['name', 'is_outdoor', 'is_indoor'])
+    name = fields.String(required=True, validate=Length(min=3))
 
     class Meta:
-        fields = ('id', 'name', 'area_id', 'user', 'area')
+        fields = ('id', 'name', 'user', 'area', 'area_id')

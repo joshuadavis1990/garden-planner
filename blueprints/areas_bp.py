@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from models.area import Area, AreaSchema
 from init import db
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from blueprints.auth_bp import admin_required, admin_or_owner_required
 
 areas_bp = Blueprint('areas', __name__, url_prefix='/areas')
@@ -45,7 +45,7 @@ def create_area():
         name = area_info['name'],
         is_outdoor = area_info['is_outdoor'],
         is_indoor = area_info['is_indoor'],
-        user_id = area_info['user_id']
+        user_id = get_jwt_identity()
     )
     # Add and commit the new area to the session
     db.session.add(area)

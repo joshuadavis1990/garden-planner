@@ -7,6 +7,7 @@ from blueprints.plantrecords_bp import plantrecords_bp
 from blueprints.plants_bp import plants_bp
 from blueprints.areas_bp import areas_bp
 from blueprints.spaces_bp import spaces_bp
+from marshmallow.exceptions import ValidationError
 
 # Factory function for creating and configuring an object, 'app', and returning it
 def setup():
@@ -22,7 +23,11 @@ def setup():
 
     @app.errorhandler(401)
     def unauthorized(err):
-        return {'error': 'You must be an admin'}, 401
+        return {'error': str(err)}, 401
+    
+    @app.errorhandler(ValidationError)
+    def validation_error(err):
+        return {'error': err.__dict__['messages']}, 400
             
     app.register_blueprint(cli_bp)
     app.register_blueprint(auth_bp)
