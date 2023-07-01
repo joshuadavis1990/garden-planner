@@ -891,7 +891,11 @@ The following third party services were used in the development of the Garden Pl
 
 ## R8 - Model Description
 
-The Garden Planner API was built using a relational database model that was able to show the associations between the application's main models/entities. In summary, these models are:
+All of the models for the API are available within a `models` directory and are built using the ORM, SQLAlchemy. These models provide an abstract representation of the tables to be implemented in the database, where each model is a Python class or object, for example `class Area(db.Model)`. Each attribute of the model in question represents a column in the database table and each class inherits from db.Model.
+
+## R9 - Database Relations
+
+The Garden Planner API was built using a relational database model that was able to show the relationships between the application's main models/entities. In summary, these models are:
 
 1. `users`
 2. `areas`
@@ -901,27 +905,31 @@ The Garden Planner API was built using a relational database model that was able
 
 As shown in the ERD in R6 above, these models are related to one another through foreign keys. Each model also has its own attributes and data types, and importantly, each model has an `id` primary key that is able to uniquely identity that table.
 
+A normalisation process was conducted to prevent redundancies or inconsistent dependencies. There are three rules for database normalisation and all of these rules were applied in the development of the database schema:
+
+1. To satisfy first normal form (1NF), the tables must only contain single or atomic attributes of the same data type, every attribute must be unique, and the order in which data is stored is irrelevant (*First Normal Form*).
+2. To satisfy second normal form (2NF), the table must be in 1NF and be reduced to a single purpose. All the columns must directly relate to the primary key of the table (*Description of the database normalization basics*).
+3. To satisfy third normal form (3NF), the table must be in 2NF and any transitively dependent fields — that is, fields that depend on another field — must be eliminated (*Third Normal Form*). These transitively dependent attributes would need to be moved into a new table so they only depend on the primary key of that new table.
+
 ![UsersModel](docs/usersmodel.png)
 
 The `users` model stores data about active users of the application, including their basic credentials for login and authentication purposes. The API requires users to enter a `f_name`, `l_name`, `email` and `password`. There is also an optional attribute, `is_admin`, a Boolean that will default to `False` if not provided. If `is_admin`, the user will have greater privileges in the application. In the development of the application, it was decided that a `users` model was important as it would allow for a unique user to input their own data related to their gardens. It proved to be an essential entity in the relational model as every table has `user_id` as a foreign key. This was particularly helpful in establishing nested fields usings `fields.Nested` in the Marshmallow schemas of each model. The server response could then show additional relational information in the JSON when accessing particular endpoints.
 
 ![AreasModel](docs/areasmodel.png)
 
-The `areas` model was developed to enable a user to
+The `areas` model was developed to enable a user to enter details regarding their broader planting areas; namely, its `name` as a 100-character string, as well as two Booleans indicating whether the area is outdoors or indoors: `is_outdoor` and `is_indoor`. It is broad enough to accommodate a wide range of city and more rural lifestyles. Examples of `areas` might be 'Front Yard', 'Back Yard', 'House', or 'Side of House'. This model structure was chosen to enable users to better filter their areas according to their needs. The `areas` model is in direct relationship with the `spaces` model. Ultimately, an urban user might only have one `area` associated with their `user_id`, perhaps 'Apartment'. However, a larger property owner will appreciate the greater flexibility afforded by the `area` model, specifically being able to break their property up into spaces. The `area` model could have been removed entirely and the responsibility could have completely fallen to the `spaces` model; however, that would be a less organised solution. One of the chief aims of this application is to enable a user to organise and plan their garden spaces. Ultimately, garden spaces can belong to different areas of a property.
 
 ![SpacesModel](docs/spacesmodel.png)
 
-The `spaces` model was
+The `spaces` model was designed to enable users to set up their specific planting locations or spaces. Examples might be 'Vegetable Garden', 'Front Left Window', 'Front Right Window', 'Rose Garden', 'Alfresco' or 'Patio'. This is the heart of the application as this is the model that directly relates to the individuals plants or trees of the user, which is seen with its primary key, `space_id`, being in the `plants` model. A `space` is simply a smaller area within a broader `area`.
 
 ![PlantRecordsModel](docs/plantrecordsmodel.png)
 
-The `plantrecords` model was
+The `plantrecords` model acts as a compendium or glossary of all the plant records logged by a particular user. The only mandatory field, other than the primary key of `plantrecord_id` is the `name` field. However, the API provides the user with plenty of scope to add information as they desire, including `description`, `preferred_location`, `water_rate`, `fertilisation_rate`, and `other_comments`. This is the data center of the application where, at any point, a user can log plant details as a record or place of safe keeping. Indeed, the `plantrecord` does not actually need to be linked to an actual `plant` garden - the model allows the user to simply enter into plant details as they desire. Perhaps they are in the process of planning out their garden and are not ready to commit to actually planting anything - this model allows the user to do this. However, ultimately a `plantrecord` will be related to a `plant` which, in essence, is like an instance of a plantrecord.
 
 ![PlantsModel](docs/plantsmodel.png)
 
-The `plants` model was
-
-## R9 - Database Relations
+As previously stated, the `plants` model is best considered as an instance of a `plantrecord`. It is a join table to facilitate a many to many relationship between `plantrecords` and `spaces` because ultimately a `plantrecord` can belong to many different `spaces`, but a space can also contain many different `plantrecords`. A many to many relationship such as this cannot be directly modelled in a database; therefore, a join table, `plants` was developed. A `plantrecord`, for example a 'Rose', can belong to many different `plants` or instances; however, that plant can only belong to one `plantrecord.` In other words, a rose can only ever be a rose, but many different rose bushes can ultimately be planted in a space.
 
 ## R10 - Project Management
 
@@ -933,11 +941,15 @@ The `plants` model was
 
 *Description of the database normalization basics*, Microsoft, https://learn.microsoft.com/en-us/office/troubleshoot/access/database-normalization-description. Accessed 28 June 2023.
 
+*First Normal Form (1NF)*, Geeks for Geeks, https://www.geeksforgeeks.org/first-normal-form-1nf/. Accessed 1 July 2023.
+
 *SQLAlchemy 2.0 Documentation*, SQLAlchemy, https://docs.sqlalchemy.org/en/20/orm/quickstart.html. Accessed 28 June 2023.
 
 *The benefits of PostgreSQL*, Prisma's Data Guide, https://www.prisma.io/dataguide/postgresql/benefits-of-postgresql. Accessed 28 June 2023.
 
 *The Python SQL Toolkit and Object Relational Mapper*, SQLAlchemy, https://www.sqlalchemy.org. Accessed 28 June 2023.
+
+*Third Normal Form*, Geeks for Geeks, https://www.geeksforgeeks.org/third-normal-form-3nf/. Accessed 1 July 2023.
 
 *Understanding Object-Relational Mapping*, altexsoft, https://www.altexsoft.com/blog/object-relational-mapping/. Accessed 28 June 2023.
 
