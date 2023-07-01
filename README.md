@@ -945,7 +945,17 @@ The Marshmallow `PlantRecordSchema` includes in-built validation methods, includ
 
 ### The `plant` model
 
+The `plant` model is firstly given the syntactically correct `plants` plural `__tablename__`. A number of class attributes are then defined as the columns of the table. A primary key of `id` is first established, followed by two `db.Date` data types for `date_planted` and `date_fertilised` both of which are not required of the user. Three `db.ForeignKey` are set up because:
 
+1. A user can plant many plants, but a plant can only belong to one user,
+1. A space can contain many plants, but a plant can only belong to one space, and 
+1. A plant record can be associated with many instances of plants, but each plant can only correlate to one plant record.
+
+For these reasons, foreign keys to `user_id`, `space_id` and `plantrecord_id` are defined.
+
+Two `db.relationship` are setup so that back population can occur in a two sided manner and, ultimately, the `PlantSchema` can nest data from both `User` and `PlantRecord`. This is incredibly important as, without nested `PlantRecord` data, for example, the `Plant` data is relatively meaningless.
+
+The Marshmallow `PlantSchema` validates input data, deserialises input data to app-level objects and serialises app-level objects to primitive Python types (*marshmallow: simplified object serialization*). In essence, this `PlantSchema` converts the Python class, `Plant`, into a JSONified data type.
 
 ## R9 - Database Relations
 
