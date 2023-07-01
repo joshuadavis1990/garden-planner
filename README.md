@@ -847,19 +847,19 @@ The following is the expected response from the `/plants/<int:plant_id>` endpoin
 
 ## R7 - Third Party Services
 
-The following third party services were used in the development of the Garden Planner API: Talk about Flask in this general paragraph
+The following third party services were used in the development of the Garden Planner API. It is important to note initially that Flask was used as the Python web framework to build the application. Flask is considered a microframework as it is designed to keep the core of the application simple and scalable. Flask supports multiple library extensions to add capabilities to any application. The benefits of Flask, however, include automation, accessibility and reusability.
 
-### SQLAlchemy==2.0.16
+### SQLAlchemy (version 2.0.16)
 
+SQLAlchemy is a popular Python SQL toolkit and ORM that gave me the full power and flexibility of SQL and the PostgreSQL relational database. It provides a Pythonic way of interacting with databases so you can more efficiently query your data. It allows for Python classes or objects to be mapped to the database, thereby allowing the object model and database schema to develop in a decoupled manner (*SQLAlchemy Tutorial*). An additional benefit of using an ORM such as SQLAlchemy is that it is able to sanitise the incoming data in its translation of the database query to SQL.
 
+### Psycopg2 (version 2.9.6)
 
-### psycopg2-binary==2.9.6
+Psychopg2 is the most popular PostgreSQL database adapter for Python. As the ORM used for this API, SQLAlchemy, is database agnostic, it needed an adapter to interact with the database. It is written in C and enables the user to perform the full range of SQL operations against a PostgreSQL database.
 
+### Flask-Marshmallow (version 0.15.0)
 
-
-### Flask-Marshmallow
-
-
+Flask-Marshmallow is a framework-agnostic library for converting complex data types, such as Python classes, into another type, such as JSON. Marshmallow schemas have been used for every model in the Garden Planner API to validate input data, deserialize input data and serialize app-level objects to Python types so they can then be rendered to standard formats such as JSON (*marshmallow: simplified object serialization*). It is important to note that loading data from any request is known as deserialization, but the process of formatting the output response data is known as serialization, where data is dumped to the response (*Data Schema*).
 
 ### python-dotenv==1.0.0
 
@@ -870,10 +870,6 @@ The following third party services were used in the development of the Garden Pl
 
 
 ### Flask-JWT-Extended==4.5.2
-
-
-
-### flask-marshmallow==0.15.0
 
 
 
@@ -1002,6 +998,8 @@ As previously stated, the `plants` table is best considered as an instance of a 
 *Advantages of Database Management System (DBMS)*, Java T Point, https://www.javatpoint.com/advantages-of-dbms. Accessed 28 June 2023.
 
 *Benefits of relational databases*, IBM, https://www.ibm.com/topics/relational-databases#:~:text=The%20primary%20benefit%20of%20the,group%2C%20and%20also%20combine%20queries. Accessed 28 June 2023.
+
+*Data Schema*, APIFlask, https://apiflask.com/schema/. Accessed 1 June 2023.
 
 *Description of the database normalization basics*, Microsoft, https://learn.microsoft.com/en-us/office/troubleshoot/access/database-normalization-description. Accessed 28 June 2023.
 
