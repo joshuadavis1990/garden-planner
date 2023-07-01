@@ -891,7 +891,61 @@ The following third party services were used in the development of the Garden Pl
 
 ## R8 - Model Description
 
-All of the models for the API are available within a `models` directory and are built using the ORM, SQLAlchemy. These models provide an abstract representation of the tables to be implemented in the database, where each model is a Python class or object, for example `class Area(db.Model)`. Each attribute of the model in question represents a column in the database table and each class inherits from db.Model.
+All of the models for the API are available within a `models` directory and are built using the ORM, SQLAlchemy. These models provide an abstract representation of the tables to be implemented in the database, where each model is a Python class or object, for example `class Area(db.Model)`. Each attribute of the model in question represents a column in the database table and each class inherits from `db.Model`. These models directly and exactly correlate with the ERD created for the API.
+
+In the `init.py` file, the `db` instance is created using SQLAlchemy. In turn, each of the five models in the API inherits from `db.Model` which helps the controller receive the information it needs from the database. The models each define column names, data types, constraints, primary keys and foreign keys. This is a Pythonic representation of SQL queries that interacts with the database schema in a seamless manner.
+
+### The `user` model
+
+The `user` model is firstly given the syntactically correct `users` plural `__tablename__`. A number of class attributes are then defined as the columns of the table. A primary key of `id` is first established, followed by attributes for `f_name`, `l_name`, `email`, `password` and `is_admin`. The data types for each attribute are defined and a few constraints are outlined, including the fact that the `email` must be provided and must be unique from other entries in the table, the `password` field must be provided, and the `is_admin` Boolean defaults to `False` if no value is entered.
+
+After this, a number of `db.relationships` are defined, all of which back populate to the variable, `users`. These four relationships are established here because the `user_id` attribute is referenced as a foreign key by all other models in the database. This is due to the fact that users can:
+
+1. Create, read, edit and delete areas
+1. Create, read, edit and delete spaces
+1. Create, read, edit and delete plantrecords
+1. Create, read, edit and delete plants
+
+The `db.relationship` entries specified here allow for the `UserSchema` to nest information about the tables and data in which the `user_id` is a foreign key.
+
+The Marshmallow `UserSchema` validates input data, deserialises input data to app-level objects and serialises app-level objects to primitive Python types (*marshmallow: simplified object serialization*). In essence, this `UserSchema` converts the Python class, `User`, into a JSONified data type.
+
+### The `area` model
+
+The `area` model is firstly given the syntactically correct `areas` plural `__tablename__`. A number of class attributes are then defined as the columns of the table. A primary key of `id` is first established, followed by attributes for `name`, `is_outdoor` and `is_indoor`. The data types for each attribute are defined.
+
+A `db.ForeignKey` is setup to link the table to `users.id` which is a mandatory field. This means that an `area` can only be created by a user as the `user` owns or establishes or defines the `area`. 
+
+After this, a number of `db.relationships` are defined, all of which back populate to the variable, `areas`. These two relationships are established here because the class has a relationship with the `User` class due to the foreign key, `user_id`, and to the `Space` class as it references `area_id` as a foreign key. This allows for a two-way relationship between the classes where each can reference each other in their respective Schemas and nested data.
+
+The `db.relationship` entries specified here allow for the `AreaSchema` to nest information about the tables and data specified under `class Meta`.
+
+The Marshmallow `AreaSchema` includes in-built validation methods, including that the `name` attribute given to an `Area` must be a minimum length of 3 characters and can only contain characters specified in `Regexp`. A custom error message is provided if the user enters an invalid `name`. In essence, this `AreaSchema` converts the Python class, `Area`, into a JSONified data type.
+
+### The `space` model
+
+The `space` model is firstly given the syntactically correct `spaces` plural `__tablename__`. This model only contains one attribute, `name`, which is defined as a 100 character string.
+
+Two `db.ForeignKey` are set up, including the foreign keys `area_id` and `user_id`. The `Space` model is in a one to many relationship with both `Area` and `User` in that:
+
+1. A user can have many spaces, but a space can only belong to one user, and
+1. An area can contain many spaces, but a space can only belong to one area.
+
+There is also a `db.relationship` setup to both `User` and `Area` so that back population can occur in a two sided manner and, ultimately, the `SpaceSchema` can nest data from both these classes in the output to the server.
+
+### The `plantrecord` model
+
+The `plantrecord` model is firstly given the syntactically correct `plantrecords` plural `__tablename__`. A number of class attributes are then defined as the columns of the table. A primary key of `id` is first established, followed by attributes for `name`, `description`, `preferred_location`, `water_rate`, `fertilisation_rate` and `other_comments`. The data types for each attribute are defined and a few constraints are outlined in a similar fashion to previous models.
+
+The only `db.ForeignKey` required is for `user_id` as a user can create many `plantrecords` but ultimately these records can only belong to one user, hence `plantrecord_id` is not needed as a foreign key in the `User` model.
+
+Two `db.relationship` are setup so that back population can occur in a two sided manner and, ultimately, the `PlantRecordSchema` can nest data from both `User` and `Plant`.
+
+The Marshmallow `PlantRecordSchema` includes in-built validation methods, including that the `name` is a certain minimum length and that `water_rate` is given one of a number of predefined one-word responses in `VALID_WATERRATES`. A custom decorator function is initiated if a valid `water_rate` is not selected. Additionally, the Schema provides a number of `load_default` fields if the user does not enter in anything, and in every case it is an empty string.
+
+### The `plant` model
+
+
 
 ## R9 - Database Relations
 
@@ -903,9 +957,9 @@ The Garden Planner API was built using a relational database model that was able
 4. `plantrecords`
 5. `plants`
 
-As shown in the ERD in R6 above, these models are related to one another through foreign keys. Each model also has its own attributes and data types, and importantly, each model has an `id` primary key that is able to uniquely identity that table.
+As shown in the ERD in R6 above, these models are related to one another through foreign keys. Each model also has its own attributes and data types, and importantly, each model has an `id` primary key that is able to uniquely identity that table. This `id` is a serialised integer.
 
-A normalisation process was conducted to prevent redundancies or inconsistent dependencies. There are three rules for database normalisation and all of these rules were applied in the development of the database schema:
+A thorough normalisation process was conducted to prevent redundancies or inconsistent dependencies. There are three rules for database normalisation and all of these rules were applied in the development of the database schema:
 
 1. To satisfy first normal form (1NF), the tables must only contain single or atomic attributes of the same data type, every attribute must be unique, and the order in which data is stored is irrelevant (*First Normal Form*).
 2. To satisfy second normal form (2NF), the table must be in 1NF and be reduced to a single purpose. All the columns must directly relate to the primary key of the table (*Description of the database normalization basics*).
@@ -913,23 +967,23 @@ A normalisation process was conducted to prevent redundancies or inconsistent de
 
 ![UsersModel](docs/usersmodel.png)
 
-The `users` model stores data about active users of the application, including their basic credentials for login and authentication purposes. The API requires users to enter a `f_name`, `l_name`, `email` and `password`. There is also an optional attribute, `is_admin`, a Boolean that will default to `False` if not provided. If `is_admin`, the user will have greater privileges in the application. In the development of the application, it was decided that a `users` model was important as it would allow for a unique user to input their own data related to their gardens. It proved to be an essential entity in the relational model as every table has `user_id` as a foreign key. This was particularly helpful in establishing nested fields usings `fields.Nested` in the Marshmallow schemas of each model. The server response could then show additional relational information in the JSON when accessing particular endpoints.
+The `users` table stores data about active users of the application, including their basic credentials for login and authentication purposes. The API requires users to enter a `f_name`, `l_name`, `email` and `password`. There is also an optional attribute, `is_admin`, a Boolean that will default to `False` if not provided. If `is_admin`, the user will have greater privileges in the application. In the development of the application, it was decided that a `users` model was important as it would allow for a unique user to input their own data related to their gardens. It proved to be an essential entity in the relational model as every table has `user_id` as a foreign key. This was particularly helpful in establishing nested fields usings `fields.Nested` in the Marshmallow schemas of each model. The server response could then show additional relational information in the JSON when accessing particular endpoints.
 
 ![AreasModel](docs/areasmodel.png)
 
-The `areas` model was developed to enable a user to enter details regarding their broader planting areas; namely, its `name` as a 100-character string, as well as two Booleans indicating whether the area is outdoors or indoors: `is_outdoor` and `is_indoor`. It is broad enough to accommodate a wide range of city and more rural lifestyles. Examples of `areas` might be 'Front Yard', 'Back Yard', 'House', or 'Side of House'. This model structure was chosen to enable users to better filter their areas according to their needs. The `areas` model is in direct relationship with the `spaces` model. Ultimately, an urban user might only have one `area` associated with their `user_id`, perhaps 'Apartment'. However, a larger property owner will appreciate the greater flexibility afforded by the `area` model, specifically being able to break their property up into spaces. The `area` model could have been removed entirely and the responsibility could have completely fallen to the `spaces` model; however, that would be a less organised solution. One of the chief aims of this application is to enable a user to organise and plan their garden spaces. Ultimately, garden spaces can belong to different areas of a property.
+The `areas` table was developed to enable a user to enter details regarding their broader planting areas; namely, its `name` as a 100-character string, as well as two Booleans indicating whether the area is outdoors or indoors: `is_outdoor` and `is_indoor`. It is broad enough to accommodate a wide range of city and more rural lifestyles. Examples of `areas` might be 'Front Yard', 'Back Yard', 'House', or 'Side of House'. This model structure was chosen to enable users to better filter their areas according to their needs. The `areas` model is in direct relationship with the `spaces` model. Ultimately, an urban user might only have one `area` associated with their `user_id`, perhaps 'Apartment'. However, a larger property owner will appreciate the greater flexibility afforded by the `area` model, specifically being able to break their property up into spaces. The `area` model could have been removed entirely and the responsibility could have completely fallen to the `spaces` model; however, that would be a less organised solution. One of the chief aims of this application is to enable a user to organise and plan their garden spaces. Ultimately, garden spaces can belong to different areas of a property.
 
 ![SpacesModel](docs/spacesmodel.png)
 
-The `spaces` model was designed to enable users to set up their specific planting locations or spaces. Examples might be 'Vegetable Garden', 'Front Left Window', 'Front Right Window', 'Rose Garden', 'Alfresco' or 'Patio'. This is the heart of the application as this is the model that directly relates to the individuals plants or trees of the user, which is seen with its primary key, `space_id`, being in the `plants` model. A `space` is simply a smaller area within a broader `area`.
+The `spaces` table was designed to enable users to set up their specific planting locations or spaces. Examples might be 'Vegetable Garden', 'Front Left Window', 'Front Right Window', 'Rose Garden', 'Alfresco' or 'Patio'. This is the heart of the application as this is the model that directly relates to the individuals plants or trees of the user, which is seen with its primary key, `space_id`, being in the `plants` model. A `space` is simply a smaller area within a broader `area`.
 
 ![PlantRecordsModel](docs/plantrecordsmodel.png)
 
-The `plantrecords` model acts as a compendium or glossary of all the plant records logged by a particular user. The only mandatory field, other than the primary key of `plantrecord_id` is the `name` field. However, the API provides the user with plenty of scope to add information as they desire, including `description`, `preferred_location`, `water_rate`, `fertilisation_rate`, and `other_comments`. This is the data center of the application where, at any point, a user can log plant details as a record or place of safe keeping. Indeed, the `plantrecord` does not actually need to be linked to an actual `plant` garden - the model allows the user to simply enter into plant details as they desire. Perhaps they are in the process of planning out their garden and are not ready to commit to actually planting anything - this model allows the user to do this. However, ultimately a `plantrecord` will be related to a `plant` which, in essence, is like an instance of a plantrecord.
+The `plantrecords` table acts as a compendium or glossary of all the plant records logged by a particular user. The only mandatory field, other than the primary key of `plantrecord_id` is the `name` field. However, the API provides the user with plenty of scope to add information as they desire, including `description`, `preferred_location`, `water_rate`, `fertilisation_rate`, and `other_comments`. This is the data center of the application where, at any point, a user can log plant details as a record or place of safe keeping. Indeed, the `plantrecord` does not actually need to be linked to an actual `plant` garden - the model allows the user to simply enter into plant details as they desire. Perhaps they are in the process of planning out their garden and are not ready to commit to actually planting anything - this model allows the user to do this. However, ultimately a `plantrecord` will be related to a `plant` which, in essence, is like an instance of a plantrecord.
 
 ![PlantsModel](docs/plantsmodel.png)
 
-As previously stated, the `plants` model is best considered as an instance of a `plantrecord`. It is a join table to facilitate a many to many relationship between `plantrecords` and `spaces` because ultimately a `plantrecord` can belong to many different `spaces`, but a space can also contain many different `plantrecords`. A many to many relationship such as this cannot be directly modelled in a database; therefore, a join table, `plants` was developed. A `plantrecord`, for example a 'Rose', can belong to many different `plants` or instances; however, that plant can only belong to one `plantrecord.` In other words, a rose can only ever be a rose, but many different rose bushes can ultimately be planted in a space.
+As previously stated, the `plants` table is best considered as an instance of a `plantrecord`. It is a join table to facilitate a many to many relationship between `plantrecords` and `spaces` because ultimately a `plantrecord` can belong to many different `spaces`, but a space can also contain many different `plantrecords`. A many to many relationship such as this cannot be directly modelled in a database; therefore, a join table, `plants` was developed. A `plantrecord`, for example a 'Rose', can belong to many different `plants` or instances; however, that plant can only belong to one `plantrecord.` In other words, a rose can only ever be a rose, but many different rose bushes can ultimately be planted in a space.
 
 ## R10 - Project Management
 
@@ -942,6 +996,8 @@ As previously stated, the `plants` model is best considered as an instance of a 
 *Description of the database normalization basics*, Microsoft, https://learn.microsoft.com/en-us/office/troubleshoot/access/database-normalization-description. Accessed 28 June 2023.
 
 *First Normal Form (1NF)*, Geeks for Geeks, https://www.geeksforgeeks.org/first-normal-form-1nf/. Accessed 1 July 2023.
+
+*marshmallow: simplified object serialization*, readthedocs, https://marshmallow.readthedocs.io/en/stable/. Accessed 1 July 2023.
 
 *SQLAlchemy 2.0 Documentation*, SQLAlchemy, https://docs.sqlalchemy.org/en/20/orm/quickstart.html. Accessed 28 June 2023.
 
