@@ -861,29 +861,38 @@ Psychopg2 is the most popular PostgreSQL database adapter for Python. As the ORM
 
 Flask-Marshmallow is a framework-agnostic library for converting complex data types, such as Python classes, into another type, such as JSON. Marshmallow schemas have been used for every model in the Garden Planner API to validate input data, deserialize input data and serialize app-level objects to Python types so they can then be rendered to standard formats such as JSON (*marshmallow: simplified object serialization*). It is important to note that loading data from any request is known as deserialization, but the process of formatting the output response data is known as serialization, where data is dumped to the response (*Data Schema*).
 
-### python-dotenv==1.0.0
+### python-dotenv (version 1.0.0)
 
+The directory for the API includes a `.env` file that is also placed in the `.gitignore` file. This `.env` file lists a number of sensitive key-value pairs relating to the database URI and the JWT Secret Key. The python-dotenv package reads these values and sets them up as environment variables, preventing them from needing to be hard-coded and potentially compromised. Placing them into the `.gitignore` file ensures they are protected, but any developer can read the `.env.sample` file to know what the variables are named.
 
+The directory also contains a `flaskenv` file that similarly is used to set up Flask-specific environment variables such as the name of the application's main file and function, what port to use, as well as whether to run the application in de-bug mode.
 
-### Flask-Bcrypt==1.0.1
+### Flask-Bcrypt (version 1.0.1)
 
+Flask-Bcrypt is an extension for Flask used to protect user passwords using bcrypt hashing. Hashing is the process whereby plaintext passwords are converted into hashed or encrypted formats that cannot be easily reverse-engineered, and bcrypt is simply a popular hashing algorithm based on the Blowfish cipher which is designed to be slow and computationally expensive (*Password Hashing with Bcrypt in Flask*). This makes it more difficult for attackers to crack passwords.
 
+Changing even one character in the plaintext password will drastically change the resulting hashed password.
 
-### Flask-JWT-Extended==4.5.2
+```
+password = bcrypt.generate_password_hash(user_info['password']).decode('utf-8')
+```
 
+### Flask-JWT-Extended (version 4.5.2)
 
+The Flask-JWT-Extended extension is used in the application to make JSON Web Tokens and authenticate users. JWT is able to verify the user's email and password when entered and sends back an encrypted token in the following form:
 
-### Flask-SQLAlchemy==3.0.4
+```
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4ODIxNDM3NSwianRpIjoiNzNjYTI3Y2MtMjIwZi00NDJhLTg0NGQtMDhlZTNiY2UyYmE2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNjg4MjE0Mzc1LCJleHAiOjE2ODgzMDA3NzV9.VFRrfk7C-PNPI5WaRWv8u0X4TKTagtj6XPcEw0UOz78",
+  "user": {
+    "email": "14209@coderacademy.edu.au",
+    "f_name": "Joshua",
+    "l_name": "Davis"
+  }
+}
+```
 
-
-
-### marshmallow==3.19.0
-
-
-
-### marshmallow-sqlalchemy==0.29.0
-
-
+In its simplest form, this extension facilitates the use of `create_access_token` to to make JSON Web Tokens, `jwt_required()` to protect endpoint routes, and `get_jwt_identity()` to get the identity of a JWT in a protected route. The generated token prevents the need for a user needing to constantly login at each request. The token needs to be added to the authorization header for each further request. A user's identity can be extracted from the JWT token, allowing the API to serve resources to specific users.
 
 ## R8 - Model Description
 
@@ -955,7 +964,7 @@ The Marshmallow `PlantSchema` validates input data, deserialises input data to a
 
 ## R9 - Database Relations
 
-The Garden Planner API was built using a relational database model that was able to show the relationships between the application's main models/entities. In summary, these models are:
+The Garden Planner API was built using a relational database model that was able to show the relationships between the application's main models/entities. In summary, these entities are:
 
 1. `users`
 2. `areas`
@@ -963,7 +972,7 @@ The Garden Planner API was built using a relational database model that was able
 4. `plantrecords`
 5. `plants`
 
-As shown in the ERD in R6 above, these models are related to one another through foreign keys. Each model also has its own attributes and data types, and importantly, each model has an `id` primary key that is able to uniquely identity that table. This `id` is a serialised integer.
+As shown in the ERD in R6 above, these entities/tables are related to one another through foreign keys. Each entity also has its own attributes and data types, and importantly, each entity has an `id` primary key that is able to uniquely identity that table. This `id` is a serialised integer.
 
 A thorough normalisation process was conducted to prevent redundancies or inconsistent dependencies. There are three rules for database normalisation and all of these rules were applied in the development of the database schema:
 
@@ -1006,6 +1015,8 @@ As previously stated, the `plants` table is best considered as an instance of a 
 *First Normal Form (1NF)*, Geeks for Geeks, https://www.geeksforgeeks.org/first-normal-form-1nf/. Accessed 1 July 2023.
 
 *marshmallow: simplified object serialization*, readthedocs, https://marshmallow.readthedocs.io/en/stable/. Accessed 1 July 2023.
+
+*Password Hashing with Bcrypt in Flask*, Geeks for Geeks, https://www.geeksforgeeks.org/password-hashing-with-bcrypt-in-flask/. Accessed 1 July 2023.
 
 *SQLAlchemy 2.0 Documentation*, SQLAlchemy, https://docs.sqlalchemy.org/en/20/orm/quickstart.html. Accessed 28 June 2023.
 
