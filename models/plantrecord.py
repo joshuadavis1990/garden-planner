@@ -5,8 +5,10 @@ from marshmallow.validate import Length, OneOf, ValidationError
 VALID_WATERRATES = ['Light', 'Average', 'Heavy', 'Weekly']
 
 class PlantRecord(db.Model):
+    # Plural table name
     __tablename__ = 'plantrecords'
 
+    # Class attributes
     id = db.Column(db.Integer, primary_key=True)
     
     name = db.Column(db.String(100))
@@ -16,11 +18,14 @@ class PlantRecord(db.Model):
     fertilisation_rate = db.Column(db.Text())
     other_comments = db.Column(db.Text())
 
+    # Set up foreign key attributes
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
-
+    
+    # The db.relationship() function provides a relationship between two mapped classes
     user = db.relationship('User', back_populates='plantrecords', cascade='all, delete')
     plants = db.relationship('Plant', back_populates='plantrecord', cascade='all, delete')
 
+# Create Marshmallow schema to validate and serialize input data so it can be JSONified
 class PlantRecordSchema(ma.Schema):
     user = fields.Nested('UserSchema', exclude=['password', 'spaces', 'areas'])
     plants = fields.List(fields.Nested('PlantSchema', only=['date_planted', 'date_fertilised', 'id', 'space_id']))

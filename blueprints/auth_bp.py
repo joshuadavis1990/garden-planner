@@ -43,6 +43,7 @@ def delete_user(user_id):
     else:
         return {'error': 'User not found'}, 404
 
+# Register a new user
 @auth_bp.route('/register', methods = ['POST'])
 def register():
     try:
@@ -64,7 +65,8 @@ def register():
         return UserSchema(exclude=['password', 'areas', 'spaces']).dump(user), 201
     except IntegrityError:
         return {'error': 'Email address already in use'}, 409
-    
+
+# Login with a username and password   
 @auth_bp.route('/login', methods=['POST'])
 def login():
     try:
@@ -77,7 +79,8 @@ def login():
             return {'error': 'Invalid email address or password'}, 401
     except KeyError:
         return {'error': 'Email address and password are required'}, 400
-    
+
+# Function to check whether a user is an admin and add authorisation to routes
 def admin_required():
     user_id = get_jwt_identity()
     stmt = db.select(User).filter_by(id=user_id)
@@ -85,6 +88,7 @@ def admin_required():
     if not (user and user.is_admin):
         abort(401, description='You must be an admin')
 
+# Function to check whether a user is either an admin or the owner and add authorisation to routes
 def admin_or_owner_required(owner_id):
     user_id = get_jwt_identity()
     stmt = db.select(User).filter_by(id=user_id)
