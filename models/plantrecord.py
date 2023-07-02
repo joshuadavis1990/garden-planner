@@ -22,7 +22,7 @@ class PlantRecord(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     
     # The db.relationship() function provides a relationship between two mapped classes
-    user = db.relationship('User', back_populates='plantrecords', cascade='all, delete')
+    user = db.relationship('User', back_populates='plantrecords')
     plants = db.relationship('Plant', back_populates='plantrecord', cascade='all, delete')
 
 # Create Marshmallow schema to validate and serialize input data so it can be JSONified

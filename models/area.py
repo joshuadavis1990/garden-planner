@@ -15,8 +15,8 @@ class Area(db.Model):
     
     # Set up foreign key attributes
     # The db.relationship() function provides a relationship between two mapped classes
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
-    user = db.relationship('User', back_populates='areas', cascade='all, delete')
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('User', back_populates='areas')
     spaces = db.relationship('Space', back_populates='area', cascade='all, delete')
 
 # Create Marshmallow schema to validate and serialize input data so it can be JSONified

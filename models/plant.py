@@ -14,10 +14,10 @@ class Plant(db.Model):
     # Set up foreign key attributes
     # The db.relationship() function provides a relationship between two mapped classes
     space_id = db.Column(db.Integer, db.ForeignKey('spaces.id', ondelete='CASCADE'), nullable=False)
-    plantrecord_id = db.Column(db.Integer, db.ForeignKey('plantrecords.id', ondelete='CASCADE'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
-    user = db.relationship('User', back_populates='plants', cascade='all, delete')
-    plantrecord = db.relationship('PlantRecord', back_populates='plants', cascade='all, delete')
+    plantrecord_id = db.Column(db.Integer, db.ForeignKey('plantrecords.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('User', back_populates='plants')
+    plantrecord = db.relationship('PlantRecord', back_populates='plants')
 
 # Create Marshmallow schema to validate and serialize input data so it can be JSONified
 class PlantSchema(ma.Schema):
