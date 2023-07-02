@@ -21,7 +21,9 @@ There are a number of reasons why the Garden Planner application was built and h
 - The Garden Planner API simplifies and unifies the process of plant and tree record keeping. For me personally, I was finding it overwhelming managing how to log when I had last watered, fertilised, transplanted or repotted my plants and I was finding that I was "solving" this problem by logging reminders in different applications, keeping tab of the plant information slips coming back with the plant from a nursery, or simply just having to look and see what the plant was requiring at any given moment. This method of garden management was cumbersome and it was difficult to maintain accuracy and a method of record-keeping. The simple process of entering data in fields such as plants and planting spaces allows for the user to keep tab of their plant varieties in a single, organised location.
 - The application does not prefill the data entry fields with irrelevant information about plant upkeep from other countries with different climates to Australia. The user can enter accurate and relevant information, often obtained by simply looking over the slip that comes with each plant.
 - The user can tailor the application to their needs, making it as simple or detailed as they need. It's designed to be flexible, allowing the user to input data that reflects their space. This solves the problem identified in R1 above by giving the user an opportunity to record all their plant species and planting locations in an organised manner.
+- Users can access data about plants in a variety of areas and spaces. An area, for example, might be "Front Yard" and a space might "Window Garden." Additionally, when establishing an area, the user is given the chance to specify whether it is indoors or outdoors, thus allowing for filtering of searches. 
 - As our gardens change and update, the Garden Planner API allows for full CRUD functionality across the various entities. This solves the problem of not being able to easily remember how to care for our gardens as they grow.
+- The application was also designed to assist aspiring or to-be gardeners as any user of the application can simply log details about their favourite plants. The records for these are then stored in the application and can be retrieved in the future if planted.
 
 ## R3 - Evaluation of Relational Databases and PostgreSQL
 
@@ -1010,7 +1012,7 @@ Before starting the API, I spent time brainstorming an everyday problem that cou
 
 ### Overview of the Kanban Framework
 
-Throughout the process of developing the Garden Planner API, I used the popular Kanban framework to implement an agile methodology to development and project management. "Kanban" is the Japanese word for "visual signal" (*What is a kanban board?*) and, therefore, a Kanban board requires a visual representation all the items needing to be completing, which was greatly beneficial in allowing me to see my progress over time.
+Throughout the process of developing the Garden Planner API, I used the popular Kanban framework to implement an agile methodology to development and project management. "Kanban" is the Japanese word for "visual signal" (*What is a kanban board?*) and, therefore, a Kanban board requires a visual representation of all the items needing to be completed, which was greatly beneficial in allowing me to see my progress over time.
 
 I used Trello to implement a digital Kanban board to maximise efficiency. I set up the basic columns to be:
 
@@ -1029,7 +1031,30 @@ These columns were then populated with cards, such as the two examples below. I 
 
 ### User Stories
 
-A user story is an informal and general explanation of a software feature written from the perspective of the end user. Its purpose is to articulate how a software feature will provide value to the customer (*User stories with examples and a template*). These are an important part of any agile development and I implemented them into my Trello board as a part of my initial planning and brainstorming process.
+A user story is an informal and general explanation of a software feature written from the perspective of the end user. Its purpose is to articulate how a software feature will provide value to the customer (*User stories with examples and a template*). These are an important part of any agile development and I implemented them into my Trello board as a part of my initial planning and brainstorming process. I found it helpful being able to consider what the specific user might require functionally from the API and I made sure to incorporate their needs into the design of the database and application.
+
+Here are four samples of some of the user stories developed and logged in Trello:
+
+![UserStories](docs/userstories.png)
+
+### Daily Standups
+
+Each day during the development of the application, I made use of a virtual standup channel in Discord to communicate with my peers:
+
+1. What did you get done in the last 24 hours?
+1. What blockers/issues are you having?
+1. What do you plan to do in the next 24 hours?
+1. What is one thing you have learned?
+
+Not only did this methodology lend itself more to agile, but Point 3 in particular was helpful in planning my time out for the following day. Additionally, 4 was also beneficial in helping me realise my progress at any given time.
+
+![Standup](docs/standup.png)
+
+### Tidying Up/Completing Project
+
+Throughout the development process, I used simple notes and reminders to keep track of the smaller development requirements I needed to ensure I had completed before submission, such as is evident in the Notes screenshot below.
+
+![Note](docs/note.png)
 
 ## Works Cited
 
