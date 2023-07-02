@@ -1002,6 +1002,35 @@ As previously stated, the `plants` table is best considered as an instance of a 
 
 ## R10 - Project Management
 
+### Initial Project Planning and Brainstorming
+
+Before starting the API, I spent time brainstorming an everyday problem that could be solved, or at least partially solved, by the implementation of a well-designed API and relational database. I settled on the Garden Planner idea based on personal experience which made the whole project much more enjoyable. The screenshot below is a sample of the brainstorming I conducted in extrapolating on my key ideas:
+
+![Planning](docs/planning.png)
+
+### Overview of the Kanban Framework
+
+Throughout the process of developing the Garden Planner API, I used the popular Kanban framework to implement an agile methodology to development and project management. "Kanban" is the Japanese word for "visual signal" (*What is a kanban board?*) and, therefore, a Kanban board requires a visual representation all the items needing to be completing, which was greatly beneficial in allowing me to see my progress over time.
+
+I used Trello to implement a digital Kanban board to maximise efficiency. I set up the basic columns to be:
+
+1. To Do
+1. Doing
+1. Done
+
+This is an example of my Trello board at one point in the development cycle.
+
+![Trello](docs/trello.png)
+
+These columns were then populated with cards, such as the two examples below. I also set up checklists within these cards to keep track of the remaining subtasks needing to be completed. Trello is rewarding in the sense that you can physically drag these cards around into the various columns. One of the benefits of this Kanban framework is that it allows me to plan my time and make tangible progress each day. Choosing which tasks to work on (and not work on) each morning was a valuable process.
+
+![Card1](docs/card1.png)
+![Card2](docs/card2.png)
+
+### User Stories
+
+A user story is an informal and general explanation of a software feature written from the perspective of the end user. Its purpose is to articulate how a software feature will provide value to the customer (*User stories with examples and a template*). These are an important part of any agile development and I implemented them into my Trello board as a part of my initial planning and brainstorming process.
+
 ## Works Cited
 
 *Advantages of Database Management System (DBMS)*, Java T Point, https://www.javatpoint.com/advantages-of-dbms. Accessed 28 June 2023.
@@ -1028,6 +1057,10 @@ As previously stated, the `plants` table is best considered as an instance of a 
 
 *Understanding Object-Relational Mapping*, altexsoft, https://www.altexsoft.com/blog/object-relational-mapping/. Accessed 28 June 2023.
 
+*User stories with examples and a template* Atlassian, https://www.atlassian.com/agile/project-management/user-stories. Accessed 2 July 2023.
+
 *What is a database management system?* IBM, https://www.ibm.com/docs/en/zos-basic-skills?topic=zos-what-is-database-management-system. Accessed 28 June 2023.
+
+*What is a kanban board?* Atlassian, https://www.atlassian.com/agile/kanban/boards. Accessed 2 July 2023.
 
 *What is PostgreSQL?* LinkedIn, https://www.linkedin.com/pulse/what-postgresql-introduction-advantages-disadvantages-ankita-sharda. Accessed 28 June 2023.
