@@ -1,5 +1,62 @@
 # Garden Planner API
 
+## Installation and Setup
+
+Create a local directory to save the API, navigate to it and clone this GitHub repository.
+
+Run the PostgreSQL prompt in the terminal:
+
+```
+psql
+```
+
+Create a new database:
+
+```
+CREATE DATABASE garden_planner;
+```
+
+Connect to the newly created database:
+
+```
+\c garden_planner
+```
+
+Create a new user and set a password as follows:
+
+```
+CREATE USER garden_planner_dev WITH PASSWORD 'camellia';
+```
+
+Then, grant this user privileges:
+
+```
+GRANT ALL PRIVILEGES ON DATABASE garden_planner TO garden_planner_dev;
+```
+
+Open another command line window and run the following commands.
+
+Create and activate a virtual environment and then install dependencies:
+
+```
+pip3 install -m requirements.txt
+```
+
+Rename `.env.sample` to `.env` and add the following database connection stream and JWT secret key:
+
+```
+DB_URI="postgresql+psycopg2://garden_planner_dev:camellia@localhost:5432/garden_planner"
+JWT_KEY="Garden Planner"
+```
+
+You can then create the tables in the database, seed data and start the server using:
+
+```
+flask db create
+flask db seed
+flask run
+```
+
 ## R1 - Problem Identification
 
 A few years ago, I started planning and establishing my first garden in the beautiful Southern Highlands of New South Wales, Australia. As enjoyable and rewarding as the experience was, I was quickly overwhelmed by how I was possibly going to manage it in the long term. I set up repeating monthly, quarterly and even yearly reminders across multiple applications, wrote notes and even resorted to putting all the plant slips in a zip lock bag! Fast forward a few months or even years and I never felt like I was in control, knowing what plants needed what and when. This organisational problem was only exacerbated as new plants were added and older plants removed.
@@ -74,16 +131,20 @@ Despite the numerous advantages listed above, PostgreSQL is comparatively slower
 
 ## R4 - Functionality and Benefits of an Object Relational Mapper (ORM)
 
-An Object Relational Mapper (ORM) acts as a bridge between object-oriented programs and relational databases. In practice and directly related to this API, this means that an ORM will convert Python objects to the relational schema of the database. Direct SQL queries for the CRUD operations are therefore not needed when using an ORM as it acts as an additional layer between a programming language and a database. Principally, this means that it standardises the coding process, reducing boilerplate and speeding development time (*Understanding Object-Relational Mapping*). This API, in particular, has used the SQLAlchemy ORM which provides SQL functionality, and efficient and high-performing database access, adapted into a simple and Pythonic domain language (*The Python SQL Toolkit and Object Relational Mapper*).
+An Object Relational Mapper (ORM) acts as a bridge between object-oriented programs and relational databases. In practice, this means that an ORM will convert Python objects to the relational schema of the database. Direct SQL queries for the CRUD operations are therefore not needed when using an ORM as it acts as an additional layer between a programming language and a database. Principally, this means that it standardises the coding process, reducing boilerplate and speeding development time (*Understanding Object-Relational Mapping*). This API, in particular, has used the SQLAlchemy ORM which provides SQL functionality, and efficient and high-performing database access, adapted into a simple and Pythonic domain language (*The Python SQL Toolkit and Object Relational Mapper*).
 
 SQLAlchemy provides extensive help documentation for understanding its comprehensive functionality. It has allowed the following functionality with this API:
 
-- Declarative mapping of models which simultaneously define a Python object model as well as database metadata that describes real SQL tables that exist, or will exist, in a database (*SQLAlchemy 2.0 Documentation*). In this API, a model has been created for each entity in the database.
-- Creating instances of classes, using the `session.add_all()` method to add multiple objects at once, and then using the `session.commit() method to flush any pending changes and commit the current database transaction (*SQLAlchemy 2.0 Documentation*).
+- Declarative mapping of models which simultaneously define a Python object model as well as database metadata that describes real SQL tables that exist, or will exist, in a database (*SQLAlchemy 2.0 Documentation*). In this API, a model has been created for each entity in the database. Each of these models map to tables in the database.
+- Creating instances of classes, using the `session.add_all()` method to add multiple objects at once, and then using the `session.commit()` method to flush any pending changes and commit the current database transaction (*SQLAlchemy 2.0 Documentation*). The commitment of a database transaction is all-or-nothing - either all of the changes are committed, or none of them.
 - Using the `select()` function to create a new `Select` object, then invoked using a `Session`.
 - Using the `Session.scalars()` method to return a `ScalarResult` to iterate through the ORM objects selected.
 - Querying against multiple tables at once using the join keyword in the `Select.join()` method.
-- Automatically tracking changes to the objects as they are made.
+- Automatically tracking changes to the objects as they are made. These changes are then synchronized back to the database.
+- SQLAlchemy can establish relationships between models (and ultimately database tables) using foreign key constructs. The ORM also enables the use of cascading functionality so that changes to a parent object changes child objects, too.
+- An ORM can sanitise incoming data to improve data integrity.
+
+As can be seen above, an ORM has extensive benefits and functionality; however, direct SQL queries still play an important role. ORMs have higher abstraction levels which obviously make data management more efficient, but SQL can be used to construct more complex queries. Overall, the developer will be more "in control" using direct SQL and it is a more optimised solution where ORMs can become slow with large databases. However, the abstraction provided by an ORM has the added benefit of making database migration more efficient, the code is more maintainable and the need for boilerplate SQL is removed.
 
 ## R5 - Endpoint Documentation
 
